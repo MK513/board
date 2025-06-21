@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}" />
+<body class="bg-light vh-100">
+<div th:replace="~{fragments/bodyHeader :: bodyHeader}"/>
+
+<div class="container-fluid h-100 p-0">
+    <div class="row h-100 m-0">
+        <div class="col-12 h-100 d-flex flex-column">
+            <!-- 상단 제목 영역 -->
+            <div class="py-3 text-center border-bottom">
+                <h2 class="mb-0">게시글 작성</h2>
+            </div>
+
+            <!-- 본문 폼 영역 (스크롤 가능) -->
+            <form action="/board/write"
+                  th:object="${noteDTO}"
+                  method="post"
+                  enctype="multipart/form-data"
+                  class="flex-grow-1 overflow-auto d-flex flex-column p-4">
+
+                <!-- 제목 -->
+                <div class="mb-4">
+                    <label for="title" class="form-label">제목</label>
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="title"
+                            placeholder="제목을 입력하세요"
+                            th:field="*{title}"
+                            required
+                    />
+                </div>
+
+                <!-- 내용 -->
+                <div class="mb-4 flex-grow-1 d-flex flex-column">
+                    <label for="contents" class="form-label">내용</label>
+                    <textarea
+                            class="form-control flex-grow-1"
+                            id="contents"
+                            th:field="*{contents}"
+                            placeholder="내용을 입력하세요"
+                            required
+                    ></textarea>
+                </div>
+
+                <!-- 첨부파일 -->
+                <div class="mb-4">
+                    <label for="attachment" class="form-label">첨부파일 (선택)</label>
+                    <input
+                            class="form-control"
+                            type="file"
+                            id="attachment"
+                            name="attachment"
+                            accept="image/*,application/pdf"
+                    />
+                </div>
+
+                <!-- 버튼 그룹 (폼 하단 고정) -->
+                <div class="mt-auto d-flex justify-content-end pt-3 border-top">
+                    <button type="reset" class="btn btn-outline-secondary me-2">취소</button>
+                    <button type="submit" class="btn btn-primary">등록</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}" />
+</body>
+</html>
