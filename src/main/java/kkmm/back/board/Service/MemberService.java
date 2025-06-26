@@ -1,13 +1,15 @@
 package kkmm.back.board.Service;
 
-import kkmm.back.board.domain.Member;
+import kkmm.back.board.domain.model.Member;
 import kkmm.back.board.repositoy.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -29,6 +31,15 @@ public class MemberService {
         return memberRepository.findByEmail(email)
                 .getFirst();
     }
+    
+    
+    public Member login(String email, String password) {
+        return memberRepository.findByEmail(email)
+                .stream().filter(m -> m.getPassword().equals(password))
+                .findFirst()
+                .orElse(null);
+    }
+
 
     private void validateDuplicateMember(Member member) {
         List<Member> findMember = memberRepository.findByEmail(member.getEmail());

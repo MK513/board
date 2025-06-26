@@ -5,5 +5,19 @@
     <a href="/">
         <h3 class="text-muted mb-0">Bulletin Board</h3>
     </a>
+
+    <!-- 버튼 그룹: 우측 정렬 + 간격 -->
+    <div class="d-flex justify-content-end gap-2 mb-3">
+        <div th:if="${session.loginMember == null}">
+            <a th:href="@{/member/signup}" class="btn btn-outline-secondary" role="button" th:text="#{label.member.signup}">회원가입</a>
+            <a th:href="@{/member/login}" class="btn btn-outline-secondary" role="button" th:text="#{label.member.login}">로그인</a>
+        </div>
+        <div th:if="${session.loginMember != null}">
+            <a th:href="@{/board/write}" class="btn btn-outline-secondary" role="button" th:text="#{label.member.write}">글 쓰기</a>
+            <form th:action="@{/member/logout}" method="post">
+                <button type="submit" class="btn btn-outline-secondary" th:text="#{label.member.logout}">로그아웃</button>
+            </form>
+        </div>
+    </div>
 </div>
 </html>

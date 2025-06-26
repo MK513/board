@@ -1,6 +1,6 @@
 package kkmm.back.board.Service;
 
-import kkmm.back.board.domain.Note;
+import kkmm.back.board.domain.model.Note;
 import kkmm.back.board.repositoy.NoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

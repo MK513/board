@@ -1,6 +1,7 @@
-package kkmm.back.board.domain;
+package kkmm.back.board.domain.model;
 
 import jakarta.persistence.*;
+import kkmm.back.board.web.model.NoteForm;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,9 +31,17 @@ public class Note {
 
     private int viewCount;
 
-    public Note(NoteDTO noteDTO, Member member) {
-        this.title = noteDTO.getTitle();
-        this.contents = noteDTO.getContents();
+    public Note(Member member, String title, String contents) {
+        this.member = member;
+        this.title = title;
+        this.contents = contents;
+        this.createdAt = LocalDateTime.now();;
+        this.viewCount = 0;
+    }
+
+    public Note(NoteForm noteForm, Member member) {
+        this.title = noteForm.getTitle();
+        this.contents = noteForm.getContents();
         this.createdAt = LocalDateTime.now();
         this.viewCount = 0;
         this.member = member;

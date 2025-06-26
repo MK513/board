@@ -1,7 +1,7 @@
 package kkmm.back.board.repositoy;
 
 import jakarta.persistence.EntityManager;
-import kkmm.back.board.domain.Note;
+import kkmm.back.board.domain.model.Note;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

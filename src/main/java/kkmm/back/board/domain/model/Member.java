@@ -1,6 +1,7 @@
-package kkmm.back.board.domain;
+package kkmm.back.board.domain.model;
 
 import jakarta.persistence.*;
+import kkmm.back.board.web.model.SignupForm;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,9 +27,15 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Note> notes = new ArrayList<>();
 
-    public Member(MemberDTO memberDTO) {
-        this.name = memberDTO.getName();
-        this.email = memberDTO.getEmail();
-        this.password = memberDTO.getPassword();
+    public Member(String email, String password, String name) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+    }
+
+    public Member(SignupForm signupForm) {
+        this.name = signupForm.getName();
+        this.email = signupForm.getEmail();
+        this.password = signupForm.getPassword();
     }
 }

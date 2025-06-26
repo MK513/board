@@ -1,18 +1,18 @@
-package kkmm.back.board.controller;
+package kkmm.back.board.web.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import kkmm.back.board.Service.MemberService;
 import kkmm.back.board.Service.NoteService;
-import kkmm.back.board.domain.Member;
-import kkmm.back.board.domain.Note;
-import kkmm.back.board.domain.NoteDTO;
+import kkmm.back.board.domain.model.Member;
+import kkmm.back.board.domain.model.Note;
+import kkmm.back.board.web.SessionConst;
+import kkmm.back.board.web.model.NoteForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -31,16 +31,17 @@ public class NoteController {
 
     @GetMapping("/write")
     public String createForm(Model model) {
-        model.addAttribute("noteDTO", new NoteDTO());
+        model.addAttribute("note", new NoteForm());
         return "board/writeNoteForm";
     }
 
     @PostMapping("/write")
-    public String saveNote(NoteDTO noteDTO, Model model) {
+    public String saveNote(@Validated @ModelAttribute("note") NoteForm noteForm, Model model,
+                           HttpServletRequest request) {
+        Member member = (Member) request.getSession(false)
+                                        .getAttribute(SessionConst.LOGIN_MEMBER);
 
-        Member member = memberService.findByEmail("123");
-
-        Note note = new Note(noteDTO, member);
+        Note note = new Note(noteForm, member);
 
         noteService.saveNote(note);
 
