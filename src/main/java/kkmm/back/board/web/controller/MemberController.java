@@ -2,7 +2,7 @@ package kkmm.back.board.web.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import kkmm.back.board.Service.MemberService;
+import kkmm.back.board.domain.Service.MemberService;
 import kkmm.back.board.domain.model.Member;
 import kkmm.back.board.web.SessionConst;
 import kkmm.back.board.web.model.LoginForm;
@@ -53,7 +53,8 @@ public class MemberController {
 
     @PostMapping("/login")
     public String login(@Validated @ModelAttribute("login") LoginForm loginForm, BindingResult bindingResult,
-                            @RequestParam(defaultValue = "") String redirectURL, HttpServletRequest request) {
+                        @RequestParam(defaultValue = "/") String redirectURL, HttpServletRequest request) {
+
         if (bindingResult.hasErrors()) {
             return "member/loginForm";
         }
@@ -68,17 +69,18 @@ public class MemberController {
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
 
-        return "redirect:/board/list" + redirectURL;
+        log.info("redirectURL = {}", redirectURL);
+
+        return "redirect:" + redirectURL;
     }
 
     @PostMapping("/logout")
-    public String logout(HttpServletRequest request) {
-        HttpSession session = request.getSession();
+    public String logout(HttpSession session) {
 
         if (session != null) {
             session.invalidate();
         }
 
-        return "redirect:/";
+        return "redirect:/board/list";
     }
 }

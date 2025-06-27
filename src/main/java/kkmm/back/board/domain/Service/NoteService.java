@@ -1,7 +1,7 @@
-package kkmm.back.board.Service;
+package kkmm.back.board.domain.Service;
 
 import kkmm.back.board.domain.model.Note;
-import kkmm.back.board.repositoy.NoteRepository;
+import kkmm.back.board.domain.repositoy.NoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,5 +26,10 @@ public class NoteService {
 
     public List<Note> findNotes() {
         return noteRepository.findAll();
+    }
+
+    @Transactional
+    public void increaseViewCount(Long id) {
+        noteRepository.increaseViewCount(id);
     }
 }

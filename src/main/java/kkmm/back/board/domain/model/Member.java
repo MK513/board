@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,18 +25,25 @@ public class Member {
 
     private String name;
 
+    private LocalDateTime joinedAt;
+
     @OneToMany(mappedBy = "member")
     private List<Note> notes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Comment> comments = new ArrayList<>();
 
     public Member(String email, String password, String name) {
         this.email = email;
         this.password = password;
         this.name = name;
+        this.joinedAt = LocalDateTime.now();
     }
 
     public Member(SignupForm signupForm) {
         this.name = signupForm.getName();
         this.email = signupForm.getEmail();
         this.password = signupForm.getPassword();
+        this.joinedAt = LocalDateTime.now();
     }
 }

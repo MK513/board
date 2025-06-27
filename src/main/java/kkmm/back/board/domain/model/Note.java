@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.*;
 
@@ -25,11 +27,16 @@ public class Note {
 
     private String title;
 
+    @Lob
     private String contents;
 
     private LocalDateTime createdAt;
 
     private int viewCount;
+
+    @OneToMany(mappedBy = "note")
+    private List<Comment> comments = new ArrayList<>();
+
 
     public Note(Member member, String title, String contents) {
         this.member = member;
@@ -46,4 +53,5 @@ public class Note {
         this.viewCount = 0;
         this.member = member;
     }
+
 }

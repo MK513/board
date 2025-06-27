@@ -1,7 +1,7 @@
-package kkmm.back.board.Service;
+package kkmm.back.board.domain.Service;
 
 import kkmm.back.board.domain.model.Member;
-import kkmm.back.board.repositoy.MemberRepository;
+import kkmm.back.board.domain.repositoy.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package kkmm.back.board.repositoy;
+package kkmm.back.board.domain.repositoy;
 
 import jakarta.persistence.EntityManager;
 import kkmm.back.board.domain.model.Note;
@@ -24,5 +24,11 @@ public class NoteRepository {
     public List<Note> findAll() {
         return em.createQuery("select n from Note n", Note.class)
                 .getResultList();
+    }
+
+    public void increaseViewCount(Long id) {
+        em.createQuery("update Note n set n.viewCount = n.viewCount + 1 where n.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
     }
 }

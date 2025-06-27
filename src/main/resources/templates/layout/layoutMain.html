@@ -1,0 +1,9 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<body th:fragment="common_body(blocks)" class="min-h-screen flex flex-col items-center bg-gray-100 text-gray-800">
+  <div th:replace="~{fragments/bodyHeader :: bodyHeader}"/>
+
+  <th:block th:replace="${blocks}" />
+
+  <div th:replace="~{fragments/footer :: footer}"/>
+</body>
+</html>

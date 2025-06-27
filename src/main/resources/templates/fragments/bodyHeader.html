@@ -1,22 +1,33 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<div class="header text-center py-3" th:fragment="bodyHeader">
-    <!-- 타이틀 중앙 -->
-    <a href="/">
-        <h3 class="text-muted mb-0">Bulletin Board</h3>
-    </a>
 
-    <!-- 버튼 그룹: 우측 정렬 + 간격 -->
-    <div class="d-flex justify-content-end gap-2 mb-3">
-        <div th:if="${session.loginMember == null}">
-            <a th:href="@{/member/signup}" class="btn btn-outline-secondary" role="button" th:text="#{label.member.signup}">회원가입</a>
-            <a th:href="@{/member/login}" class="btn btn-outline-secondary" role="button" th:text="#{label.member.login}">로그인</a>
-        </div>
-        <div th:if="${session.loginMember != null}">
-            <a th:href="@{/board/write}" class="btn btn-outline-secondary" role="button" th:text="#{label.member.write}">글 쓰기</a>
-            <form th:action="@{/member/logout}" method="post">
-                <button type="submit" class="btn btn-outline-secondary" th:text="#{label.member.logout}">로그아웃</button>
-            </form>
+<div th:fragment="bodyHeader"
+     class="sticky top-0 z-50 w-full backdrop-blur bg-white/70 shadow-sm">
+
+    <div class="max-w-5xl mx-auto flex items-center justify-between px-6 py-4">
+        <!-- Title -->
+        <a href="/" th:href="@{/board/list}" class="select-none">
+            <h1 class="text-2xl lg:text-3xl font-bold text-gray-800 hover:text-primary transition-colors">
+                Bulletin Board
+            </h1>
+        </a>
+
+        <!-- Auth buttons -->
+        <div class="flex items-center gap-3">
+            <!-- 비로그인 상태 -->
+            <div th:if="${session.loginMember == null}" class="flex gap-3">
+                <a th:href="@{/member/signup}" class="btn btn-primary btn-sm rounded-xl shadow"
+                   role="button" th:text="#{label.member.signup}">회원가입</a>
+                <a th:href="@{/member/login}" class="btn btn-outline-primary btn-sm rounded-xl"
+                   role="button" th:text="#{label.member.login}">로그인</a>
+            </div>
+            <!-- 로그인 상태 -->
+            <div th:if="${session.loginMember != null}" class="flex gap-3">
+                <form th:action="@{/member/logout}" method="post">
+                    <button type="submit" class="btn btn-outline-primary btn-sm rounded-xl"
+                            th:text="#{label.member.logout}">로그아웃</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
