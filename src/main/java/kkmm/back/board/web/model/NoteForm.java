@@ -6,6 +6,9 @@ import kkmm.back.board.domain.model.Note;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -23,11 +26,14 @@ public class NoteForm {
 
     public String author;
 
+    private LocalDateTime createdAt;
+
     public NoteForm(Note note) {
         this.id = note.getId();
         this.title = note.getTitle();
         this.contents = note.getContents();
         this.viewCount = note.getViewCount();
         this.author = note.getMember().getName();
+        this.createdAt = note.getCreatedAt();
     }
 }

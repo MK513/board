@@ -1,9 +1,16 @@
-<html xmlns:th="http://www.thymeleaf.org">
-<body th:fragment="common_body(blocks)" class="min-h-screen flex flex-col items-center bg-gray-100 text-gray-800">
-  <div th:replace="~{fragments/bodyHeader :: bodyHeader}"/>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="common_body(content)">
+<!-- 헤더 프래그먼트 삽입 -->
+<head th:replace="~{fragments/header :: header}" />
 
-  <th:block th:replace="${blocks}" />
+<body class="min-h-screen flex flex-col bg-gray-100 text-gray-800">
+<!-- 상단 바디 헤더 -->
+<div th:replace="~{fragments/bodyHeader :: bodyHeader}"/>
 
-  <div th:replace="~{fragments/footer :: footer}"/>
+<!-- 실제 페이지 콘텐츠 삽입 -->
+<div th:replace="${content}" />
+
+<!-- 푸터 -->
+<div th:replace="~{fragments/footer :: footer}" />
 </body>
 </html>

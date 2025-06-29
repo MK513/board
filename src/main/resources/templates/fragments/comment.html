@@ -21,7 +21,7 @@
       <input type="text" id="author" th:field="*{author}" placeholder="작성자 이름" class="input input-bordered w-full" />
     </div>
     <div class="mb-4">
-      <label for="content" class="block text-sm font-medium text-gray-700 mb-1">내용</label>
+      <label for="content" class="block text-sm font-medium text-gray-700 mb-1 whitespace-pre-line">내용</label>
       <textarea id="content" th:field="*{contents}" rows="4" placeholder="댓글 내용을 입력하세요" class="textarea textarea-bordered w-full"></textarea>
     </div>
     <button type="submit" class="btn btn-primary" th:text="#{label.register}">등록</button>

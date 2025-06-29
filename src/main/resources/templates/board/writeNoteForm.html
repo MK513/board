@@ -1,72 +1,41 @@
+<!-- writeNoteForm.html -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/header :: header}" />
-<body class="bg-light vh-100">
-<div th:replace="~{fragments/bodyHeader :: bodyHeader}"/>
-
-<div class="container-fluid h-100 p-0">
-    <div class="row h-100 m-0">
-        <div class="col-12 h-100 d-flex flex-column">
-            <!-- 상단 제목 영역 -->
-            <div class="py-3 text-center border-bottom">
-                <h2 class="mb-0">게시글 작성</h2>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko"
+      th:replace="~{layout/layoutMain :: common_body(~{::body})}">
+<body>
+<div class="flex-grow py-8">
+    <div class="max-w-2xl mx-auto px-4 bg-white">
+        <header class="py-6 border-b">
+            <h2 class="text-2xl font-semibold" th:text="#{label.board.write}">게시글 작성</h2>
+        </header>
+        <form action="#" th:action="@{/board/write}" th:object="${note}"
+              method="post" enctype="multipart/form-data"
+              class="space-y-6 py-6">
+            <div>
+                <label for="title" class="block mb-2 font-medium" th:text="#{label.title}">제목</label>
+                <input type="text" id="title" th:field="*{title}"
+                       placeholder="제목을 입력하세요" required
+                       class="w-full border rounded px-3 py-2 focus:outline-none focus:ring"/>
             </div>
-
-            <!-- 본문 폼 영역 (스크롤 가능) -->
-            <form action="/board/write"
-                  th:object="${note}"
-                  method="post"
-                  enctype="multipart/form-data"
-                  class="flex-grow-1 overflow-auto d-flex flex-column p-4">
-
-                <!-- 제목 -->
-                <div class="mb-4">
-                    <label for="title" class="form-label">제목</label>
-                    <input
-                            type="text"
-                            class="form-control"
-                            id="title"
-                            placeholder="제목을 입력하세요"
-                            th:field="*{title}"
-                            required
-                    />
-                </div>
-
-                <!-- 내용 -->
-                <div class="mb-4 flex-grow-1 d-flex flex-column">
-                    <label for="contents" class="form-label">내용</label>
-                    <textarea
-                            class="form-control flex-grow-1"
-                            id="contents"
-                            th:field="*{contents}"
-                            placeholder="내용을 입력하세요"
-                            required
-                    ></textarea>
-                </div>
-
-                <!-- 첨부파일 -->
-                <div class="mb-4">
-                    <label for="attachment" class="form-label">첨부파일 (선택)</label>
-                    <input
-                            class="form-control"
-                            type="file"
-                            id="attachment"
-                            name="attachment"
-                            accept="image/*,application/pdf"
-                    />
-                </div>
-
-                <!-- 버튼 그룹 (폼 하단 고정) -->
-                <div class="mt-auto d-flex justify-content-end pt-3 border-top">
-                    <button type="reset" class="btn btn-outline-secondary me-2">취소</button>
-                    <button type="submit" class="btn btn-primary">등록</button>
-                </div>
-            </form>
-        </div>
+            <div>
+                <label for="contents" class="block mb-2 font-medium">내용</label>
+                <textarea id="contents" th:field="*{contents}"
+                          placeholder="내용을 입력하세요" required
+                          class="w-full h-48 border rounded px-3 py-2 focus:outline-none focus:ring resize-none"></textarea>
+            </div>
+            <div>
+                <label for="attachment" class="block mb-2 font-medium">첨부파일</label>
+                <input type="file" id="attachment" name="attachment"
+                       accept="image/*,application/pdf"
+                       class="block w-full text-sm text-gray-600"/>
+            </div>
+            <div class="flex justify-end space-x-3 pt-4 border-t">
+                <button type="reset" class="px-4 py-2 border rounded"
+                        th:onclick="|location.href='@{/' }|">취소</button>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">등록</button>
+            </div>
+        </form>
     </div>
-
-    <div th:replace="~{fragments/footer :: footer}" />
 </div>
-
 </body>
 </html>

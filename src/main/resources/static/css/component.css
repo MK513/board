@@ -1,0 +1,9 @@
+.custom-href {
+  text-decoration: none;               /* no-underline */
+  color: #1F2937;                      /* text-gray-800 */
+  transition: color 0.2s ease-in-out;  /* transition-colors */
+}
+.custom-href:hover {
+  text-decoration: none;               /* hover:no-underline */
+  color: /* your primary color hex */; /* hover:text-primary */
+}

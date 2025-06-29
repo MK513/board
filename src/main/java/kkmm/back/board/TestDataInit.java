@@ -34,9 +34,11 @@ public class TestDataInit {
             memberRepository.save(member);
             memberRepository.save(GINI);
 
-            noteRepository.save(new Note(member, "Title1", "contents1"));
-            noteRepository.save(new Note(member, "Title2", "contents2"));
-            noteRepository.save(new Note(member, "Title3", "contents3"));
+            for (int i = 0; i < 10; i++) {
+                noteRepository.save(new Note(member, "member " + i, "contents" + i));
+                noteRepository.save(new Note(GINI, "GINI " + i, "contents" + i));
+            }
+
         }
     }
 }
