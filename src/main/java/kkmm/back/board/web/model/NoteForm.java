@@ -22,6 +22,8 @@ public class NoteForm {
     @NotEmpty
     public String contents;
 
+    public int commentCount;
+
     public int viewCount;
 
     public String author;
@@ -35,5 +37,6 @@ public class NoteForm {
         this.viewCount = note.getViewCount();
         this.author = note.getMember().getName();
         this.createdAt = note.getCreatedAt();
+        this.commentCount = note.getComments().size();
     }
 }

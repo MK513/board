@@ -15,10 +15,10 @@
           25/06/29 18:29
         </span>
     </div>
-    <div class="prose py-6 whitespace-pre-line">
+    <div class="prose py-6 whitespace-pre-line border-b border-gray-200">
       <div th:utext="${note.contents}">내용</div>
     </div>
-    <div th:replace="~{fragments/comment :: commentSection}" class="pt-4 border-t"/>
+    <div th:replace="~{fragments/comment :: commentSection}" class="pt-4 border-t"></div>
   </div>
 </div>
 </body>

@@ -1,6 +1,5 @@
 package kkmm.back.board.web.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import kkmm.back.board.domain.Service.CommentService;
 import kkmm.back.board.domain.Service.NoteService;
@@ -29,12 +28,20 @@ public class NoteController {
     private final NoteService noteService;
     private final CommentService commentService;
 
+//    TODO 게시판 말머리?
+//    TODO 1. 게시판 분리
+//    TODO 검색 기능 추가
+//    TODO 파일 올리기 (사진, 동영상)
+
     @GetMapping("/list")
-    public String listForm(Model model) {
+    public String listForm(Model model,@RequestParam(value = "page", defaultValue = "1") int page) {
 
-        List<NoteForm> noteForms = noteService.findNotes().stream().map(NoteForm::new).collect(Collectors.toList());
+        List<NoteForm> noteForms = noteService.findPage(page).stream().map(NoteForm::new).collect(Collectors.toList());
+        Long totalPages = (noteService.findNoteCount() / 10) + 1;
 
+        log.info("totalPages: {}", totalPages);
         model.addAttribute("notes", noteForms);
+        model.addAttribute("totalPages", totalPages);
         return "board/listForm";
     }
 

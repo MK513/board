@@ -37,6 +37,9 @@ public class Note {
     @OneToMany(mappedBy = "note")
     private List<Comment> comments = new ArrayList<>();
 
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 
     public Note(Member member, String title, String contents) {
         this.member = member;

@@ -1,21 +1,20 @@
-<!-- listForm.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko"
       th:replace="~{layout/layoutMain :: common_body(~{::body})}">
-<body>
+<body class="flex flex-col min-h-screen">
+<!-- 메인 콘텐츠 -->
 <div class="flex-grow py-8">
   <div class="max-w-4xl mx-auto px-4">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-2xl font-semibold" th:text="#{label.board.list}">게시판 목록</h2>
       <div th:if="${session.loginMember != null}">
-        <a th:href="@{/board/write}" class="btn btn-primary">글 쓰기</a>
+        <a th:href="@{/board/write}" class="px-4 py-2 bg-blue-600 text-white rounded">글 쓰기</a>
       </div>
     </div>
-
     <div class="overflow-x-auto">
       <table class="w-full table-auto text-left">
         <thead>
-        <tr class="border-b bg-gray-50">
+        <tr class="border-b border-gray-200 bg-gray-50">
           <th class="px-4 py-2">#</th>
           <th class="px-4 py-2" th:text="#{label.title}">제목</th>
           <th class="px-4 py-2" th:text="#{label.author}">작성자</th>
@@ -27,32 +26,24 @@
         <tr th:each="note : ${notes}" class="hover:bg-gray-100">
           <td class="px-4 py-3" th:text="${note.id}">1</td>
           <td class="px-4 py-3">
-            <a th:href="@{/board/view/{id}(id=${note.id})}"
-               th:text="${note.title}"
-               class="custom-href text-blue-600">제목</a>
+            <div class="flex items-center space-x-2">
+              <a th:href="@{/board/view/{id}(id=${note.id})}"
+                 th:text="${note.title}"
+                 class="custom-href text-blue-600">제목</a>
+              <span class="text-gray-500 text-sm" th:text="'[' + ${note.commentCount} + ']'">[댓글수]</span>
+            </div>
           </td>
           <td class="px-4 py-3" th:text="${note.author}">작성자</td>
           <td class="px-4 py-3" th:text="${note.viewCount}">0</td>
-          <td class="px-4 py-3"
-              th:text="${#temporals.format(note.createdAt, 'yy/MM/dd HH:mm')}">
-            25/06/29 18:29
-          </td>
+          <td class="px-4 py-3" th:text="${#temporals.format(note.createdAt, 'yy/MM/dd HH:mm')}">25/06/29 18:29</td>
         </tr>
         </tbody>
       </table>
     </div>
-
-    <div class="mt-6 flex justify-center">
-      <ul class="inline-flex space-x-2">
-        <li th:each="page : ${pages}"
-            th:classappend="${page.current}? 'bg-blue-500 text-white rounded' : ''">
-          <a th:href="@{/board/list(page=${page.number})}"
-             th:text="${page.number}"
-             class="px-3 py-1 border rounded">1</a>
-        </li>
-      </ul>
-    </div>
   </div>
 </div>
+
+<!-- 하단 페이지네이션-->
+<div th:replace="~{fragments/pagination :: pagination(totalPages=${totalPages})}"></div>
 </body>
 </html>

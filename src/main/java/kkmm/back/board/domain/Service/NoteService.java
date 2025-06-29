@@ -24,12 +24,18 @@ public class NoteService {
         return noteRepository.findOne(id);
     }
 
-    public List<Note> findNotes() {
-        return noteRepository.findAll();
+    public List<Note> findPage(int page) {
+        return noteRepository.findNoteRange((page - 1) * 10, 10);
+    }
+
+    public Long findNoteCount() {
+        return noteRepository.findNoteCount();
     }
 
     @Transactional
     public void increaseViewCount(Long id) {
         noteRepository.increaseViewCount(id);
     }
+
+
 }
