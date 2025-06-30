@@ -3,6 +3,7 @@ package kkmm.back.board.domain.model;
 import jakarta.persistence.*;
 import kkmm.back.board.web.model.NoteForm;
 import lombok.AccessLevel;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import static jakarta.persistence.FetchType.*;
 
 @Entity
 @Getter
+@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Note {
 
@@ -37,24 +39,35 @@ public class Note {
     @OneToMany(mappedBy = "note")
     private List<Comment> comments = new ArrayList<>();
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
-    public Note(Member member, String title, String contents) {
-        this.member = member;
-        this.title = title;
-        this.contents = contents;
-        this.createdAt = LocalDateTime.now();;
-        this.viewCount = 0;
-    }
-
-    public Note(NoteForm noteForm, Member member) {
+    public Note(NoteForm noteForm, Member member, Category category) {
         this.title = noteForm.getTitle();
         this.contents = noteForm.getContents();
         this.createdAt = LocalDateTime.now();
         this.viewCount = 0;
         this.member = member;
+        this.category = category;
+    }
+
+
+
+
+    // Test Data 처리용
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Note(Member member, String title, String contents, Category category) {
+        this.member = member;
+        this.title = title;
+        this.contents = contents;
+        this.createdAt = LocalDateTime.now();;
+        this.category = category;
+        this.viewCount = 0;
     }
 
 }

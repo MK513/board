@@ -1,6 +1,8 @@
 package kkmm.back.board;
 
 import jakarta.annotation.PostConstruct;
+import kkmm.back.board.domain.Service.CategoryService;
+import kkmm.back.board.domain.model.Category;
 import kkmm.back.board.domain.model.Member;
 import kkmm.back.board.domain.model.Note;
 import kkmm.back.board.domain.repositoy.MemberRepository;
@@ -31,6 +33,8 @@ public class TestDataInit {
 
         private final MemberRepository memberRepository;
         private final NoteRepository noteRepository;
+        private final CategoryService categoryService;
+
         private final Random random = new Random();
 
         @Transactional
@@ -40,6 +44,8 @@ public class TestDataInit {
             Member bob   = new Member("123",   "123",   "Bob");
             memberRepository.save(alice);
             memberRepository.save(bob);
+
+            Category category = categoryService.findOne(1L);
 
             // 2) 샘플 제목과 내용 목록
             List<String> titles = Arrays.asList(
@@ -70,7 +76,7 @@ public class TestDataInit {
                 String title   = titles.get(i % titles.size());
                 String content = contents.get(i % contents.size());
 
-                Note note = new Note(author, title, content);
+                Note note = new Note(author, title, content, category);
 
                 // 랜덤하게 -0~9일, -0~23시간, -0~59분 차이 적용
                 LocalDateTime randomTime = baseTime

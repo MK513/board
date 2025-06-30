@@ -8,7 +8,12 @@
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-2xl font-semibold" th:text="#{label.board.list}">게시판 목록</h2>
       <div th:if="${session.loginMember != null}">
-        <a th:href="@{/board/write}" class="px-4 py-2 bg-blue-600 text-white rounded">글 쓰기</a>
+        <a th:href="@{/board/write}" class="btn btn-outline-primary btn-sm rounded-xl"
+           role="button" th:text="#{label.write}">글 쓰기</a>
+
+        <a th:href="@{/category/manage}" class="btn btn-outline-primary btn-sm rounded-xl"
+           role="button" th:text="#{label.category.manage}">카테고리 관리</a>
+
       </div>
     </div>
     <div class="overflow-x-auto">
@@ -16,6 +21,7 @@
         <thead>
         <tr class="border-b border-gray-200 bg-gray-50">
           <th class="px-4 py-2">#</th>
+          <th class="px-4 py-2">카테고리</th>
           <th class="px-4 py-2" th:text="#{label.title}">제목</th>
           <th class="px-4 py-2" th:text="#{label.author}">작성자</th>
           <th class="px-4 py-2" th:text="#{label.viewCount}">조회수</th>
@@ -25,6 +31,7 @@
         <tbody>
         <tr th:each="note : ${notes}" class="hover:bg-gray-100">
           <td class="px-4 py-3" th:text="${note.id}">1</td>
+          <td class="px-4 py-3" th:text="${note.categoryName}">카테고리</td>
           <td class="px-4 py-3">
             <div class="flex items-center space-x-2">
               <a th:href="@{/board/view/{id}(id=${note.id})}"
@@ -45,5 +52,25 @@
 
 <!-- 하단 페이지네이션-->
 <div th:replace="~{fragments/pagination :: pagination(totalPages=${totalPages})}"></div>
+
+<!--<script>-->
+<!--  function openModal() {-->
+<!--      document.getElementById("categoryModal").classList.remove("hidden");-->
+<!--  }-->
+
+<!--  function closeModal() {-->
+<!--      document.getElementById("categoryModal").classList.add("hidden");-->
+<!--  }-->
+
+<!--  function validateCategoryForm() {-->
+<!--      const name = document.getElementById("categoryName").value.trim();-->
+<!--      if (!name) {-->
+<!--          alert("카테고리 이름을 입력해주세요.");-->
+<!--          return false;-->
+<!--      }-->
+<!--      return true;-->
+<!--  }-->
+<!--</script>-->
+
 </body>
 </html>

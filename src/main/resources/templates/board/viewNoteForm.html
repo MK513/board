@@ -11,6 +11,7 @@
     <div class="flex items-center text-gray-600 py-4 border-b space-x-4">
       <span th:text="${note.author}">작성자</span>
       <span th:text="'조회수: ' + ${note.viewCount}">조회수: 0</span>
+      <span th:text="'[' + ${note.categoryName} + ']'">카테고리</span>
       <span th:text="${#temporals.format(note.createdAt, 'yy/MM/dd HH:mm')}">
           25/06/29 18:29
         </span>

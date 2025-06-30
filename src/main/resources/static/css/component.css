@@ -7,3 +7,7 @@
   text-decoration: none;               /* hover:no-underline */
   color: /* your primary color hex */; /* hover:text-primary */
 }
+.field-error {
+    border-color: #dc3545;
+    color: #dc3545;
+}

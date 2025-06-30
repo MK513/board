@@ -16,8 +16,9 @@ public class NoteService {
     private final NoteRepository noteRepository;
 
     @Transactional
-    public void saveNote(Note note) {
+    public Long saveNote(Note note) {
         noteRepository.save(note);
+        return note.getId();
     }
 
     public Note findOne(Long id) {

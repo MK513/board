@@ -16,8 +16,9 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public void save(Comment comment) {
+    public Long save(Comment comment) {
         commentRepository.save(comment);
+        return comment.getId();
     }
 
     public Comment findOne(Long id) {

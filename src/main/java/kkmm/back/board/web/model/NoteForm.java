@@ -2,6 +2,7 @@ package kkmm.back.board.web.model;
 
 import jakarta.persistence.Lob;
 import jakarta.validation.constraints.NotEmpty;
+import kkmm.back.board.domain.model.Category;
 import kkmm.back.board.domain.model.Note;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -28,6 +29,10 @@ public class NoteForm {
 
     public String author;
 
+    public Long categoryId;
+
+    public String categoryName;
+
     private LocalDateTime createdAt;
 
     public NoteForm(Note note) {
@@ -38,5 +43,7 @@ public class NoteForm {
         this.author = note.getMember().getName();
         this.createdAt = note.getCreatedAt();
         this.commentCount = note.getComments().size();
+        this.categoryId = note.getCategory().getId();
+        this.categoryName = note.getCategory().getName();
     }
 }
