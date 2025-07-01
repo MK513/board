@@ -11,17 +11,17 @@
         <ul class="inline-flex space-x-2 justify-center w-full no-underline">
 
             <li th:if="${startPage > blockSize}">
-                <a th:href="@{/board/list(page=${startPage - blockSize})}"
+                <a th:href="@{${requestURI}(page=${startPage - blockSize}, searchType=${param.searchType}, keyword=${param.keyword})}"
                    class="px-3 py-1 custom-href">&laquo;</a>
             </li>
             <li th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"
                 th:classappend="${pageNum == curPage} ? 'font-bold' : _">
-                <a th:href="@{/board/list(page=${pageNum})}"
+                <a th:href="@{${requestURI}(page=${pageNum}, searchType=${param.searchType}, keyword=${param.keyword})}"
                    th:text="${pageNum}"
                    class="px-3 py-1 custom-href">1</a>
             </li>
             <li th:if="${endPage < totalPages}">
-                <a th:href="@{/board/list(page=${startPage + blockSize})}"
+                <a th:href="@{${requestURI}(page=${startPage + blockSize}, searchType=${param.searchType}, keyword=${param.keyword})}"
                    class="px-3 py-1 custom-href">&raquo;</a>
             </li>
         </ul>

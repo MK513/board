@@ -1,14 +1,11 @@
 package kkmm.back.board.web.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import kkmm.back.board.domain.Service.CommentService;
 import kkmm.back.board.domain.Service.NoteService;
 import kkmm.back.board.domain.model.Comment;
 import kkmm.back.board.domain.model.Member;
 import kkmm.back.board.domain.model.Note;
-import kkmm.back.board.domain.repositoy.CommentRepository;
-import kkmm.back.board.domain.repositoy.NoteRepository;
 import kkmm.back.board.web.SessionConst;
 import kkmm.back.board.web.model.CommentForm;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +16,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor

@@ -1,7 +1,7 @@
 package kkmm.back.board.domain.Service;
 
 import kkmm.back.board.domain.model.Comment;
-import kkmm.back.board.domain.repositoy.CommentRepository;
+import kkmm.back.board.domain.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

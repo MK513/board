@@ -1,4 +1,4 @@
-package kkmm.back.board.domain.repositoy;
+package kkmm.back.board.domain.repository;
 
 import jakarta.persistence.EntityManager;
 import kkmm.back.board.domain.model.Comment;

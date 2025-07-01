@@ -30,7 +30,7 @@ public class Note {
     private String title;
 
     @Lob
-    private String contents;
+    private String content;
 
     private LocalDateTime createdAt;
 
@@ -45,7 +45,7 @@ public class Note {
 
     public Note(NoteForm noteForm, Member member, Category category) {
         this.title = noteForm.getTitle();
-        this.contents = noteForm.getContents();
+        this.content = noteForm.getContents();
         this.createdAt = LocalDateTime.now();
         this.viewCount = 0;
         this.member = member;
@@ -61,10 +61,10 @@ public class Note {
         this.createdAt = createdAt;
     }
 
-    public Note(Member member, String title, String contents, Category category) {
+    public Note(Member member, String title, String content, Category category) {
         this.member = member;
         this.title = title;
-        this.contents = contents;
+        this.content = content;
         this.createdAt = LocalDateTime.now();;
         this.category = category;
         this.viewCount = 0;

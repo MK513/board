@@ -1,14 +1,12 @@
 package kkmm.back.board.domain.Service;
 
 import kkmm.back.board.domain.model.Category;
-import kkmm.back.board.domain.model.Member;
-import kkmm.back.board.domain.repositoy.CategoryRepository;
+import kkmm.back.board.domain.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)

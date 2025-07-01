@@ -1,7 +1,8 @@
 package kkmm.back.board.domain.Service;
 
 import kkmm.back.board.domain.model.Note;
-import kkmm.back.board.domain.repositoy.NoteRepository;
+import kkmm.back.board.domain.model.SearchType;
+import kkmm.back.board.domain.repository.NoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,14 +30,22 @@ public class NoteService {
         return noteRepository.findNoteRange((page - 1) * 10, 10);
     }
 
+    public List<Note> searchPage(int page, String keyword, String searchType) {
+        return noteRepository.searchNotesRange(searchType, keyword, (page - 1) * 10, 10);
+    }
+
     public Long findNoteCount() {
         return noteRepository.findNoteCount();
     }
 
+    public Long searchNoteCount(String keyword, String searchType) {
+        return noteRepository.searchNoteCount(keyword, searchType);
+    }
     @Transactional
     public void increaseViewCount(Long id) {
         noteRepository.increaseViewCount(id);
     }
+
 
 
 }
