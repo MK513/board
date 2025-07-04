@@ -3,16 +3,61 @@
 <!-- 댓글 섹션 -->
 <div th:fragment="commentSection" class="mt-8 mx-auto px-4">
   <h3 class="text-xl font-semibold mb-4" th:text="#{label.comment}">댓글</h3>
-  <!-- 댓글 목록 -->
-  <ul class="space-y-4">
-    <li th:each="comment : ${comments}" class="border-b border-gray-200 pb-4">
-      <div class="flex justify-between items-center mb-2 text-sm text-gray-600">
-        <span class="font-medium" th:text="${comment.author}">작성자</span>
-        <time th:text="${#temporals.format(comment.createdAt, 'yy/MM/dd HH:mm')}">작성일</time>
-      </div>
-      <p th:utext="${comment.contents}" class="text-gray-700 text-sm whitespace-pre-line">댓글 내용</p>
-    </li>
-  </ul>
+    <!-- 댓글 목록 -->
+    <ul class="space-y-4">
+        <li th:each="comment : ${comments}" class="border-b border-gray-200 pb-4">
+            <div class="flex justify-between items-center mb-2 text-sm text-gray-600">
+                <span class="font-medium" th:text="${comment.author}">작성자</span>
+                <time th:text="${#temporals.format(comment.createdAt, 'yy/MM/dd HH:mm')}">작성일</time>
+            </div>
+            <p th:utext="${comment.contents}" class="text-gray-700 text-sm whitespace-pre-line">댓글 내용</p>
+
+            <!-- 답글쓰기 버튼 -->
+            <div class="mt-2">
+                <button
+                        type="button"
+                        class="text-blue-600 text-sm hover:underline reply-btn"
+                        th:attr="data-id=${comment.id}"
+                        onclick="toggleReplyForm(this)"
+                >
+                    답글쓰기
+                </button>
+            </div>
+
+            <!-- 대댓글 폼 (기본은 숨김) -->
+            <div
+                    th:attr="id=${'reply-form-' + comment.id}"
+                    class="hidden mt-4 ml-6"
+            >
+                <form
+                        th:action="@{/comment/create/{id}(id=${note.id})}"
+                        th:object="${newComment}"
+                        method="post"
+                        class="space-y-2"
+                >
+                    <!-- 대댓글의 부모 commentId 전달 -->
+                    <input type="hidden" th:field="*{parentId}" th:value="${comment.id}" />
+
+                    <!-- 작성자: session 에서 자동 처리하신다면 hidden 으로 넘기세요 -->
+                    <input type="hidden" name="author" th:value="${session.loginMember.name}" />
+
+                    <textarea
+                            id="reply-contents-[[${comment.id}]]"
+                            th:field="*{contents}"
+                            rows="2"
+                            placeholder="답글을 입력하세요"
+                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring text-sm resize-none"
+                    ></textarea>
+                    <div class="flex justify-end">
+                        <button
+                                type="submit"
+                                class="px-3 py-1 bg-blue-600 text-white rounded text-sm"
+                        >등록</button>
+                    </div>
+                </form>
+            </div>
+        </li>
+    </ul>
 
   <!-- 댓글 작성 폼 -->
   <form th:action="@{/comment/create/{id}(id=${note.id})}" th:object="${newComment}"
@@ -31,5 +76,13 @@
       <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded text-sm" th:text="#{label.register}">등록</button>
     </div>
   </form>
+
+    <script>
+        function toggleReplyForm(btn) {
+          const id = btn.getAttribute('data-id');
+          const form = document.getElementById('reply-form-' + id);
+          form.classList.toggle('hidden');
+        }
+    </script>
 </div>
 </html>

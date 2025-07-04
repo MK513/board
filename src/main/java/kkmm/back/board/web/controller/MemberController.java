@@ -72,6 +72,7 @@ public class MemberController {
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
 
+        log.info("loginMember={}", loginMember);
         log.info("redirectURL = {}", redirectURL);
 
         return "redirect:" + redirectURL;

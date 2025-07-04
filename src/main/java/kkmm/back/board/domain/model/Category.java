@@ -6,6 +6,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 @Getter
@@ -19,6 +22,9 @@ public class Category {
     private String name;
 
     private int count;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    private List<Note> notes = new ArrayList<>();
 
     public Category(String name) {
         this.name = name;

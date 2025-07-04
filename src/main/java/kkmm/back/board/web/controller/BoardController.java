@@ -1,0 +1,72 @@
+package kkmm.back.board.web.controller;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import kkmm.back.board.domain.Service.CategoryService;
+import kkmm.back.board.domain.Service.CommentService;
+import kkmm.back.board.domain.Service.NoteService;
+import kkmm.back.board.domain.model.*;
+import kkmm.back.board.web.SessionConst;
+import kkmm.back.board.web.model.CommentForm;
+import kkmm.back.board.web.model.NoteForm;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Controller
+@RequiredArgsConstructor
+@RequestMapping("/board")
+@Slf4j
+public class BoardController {
+
+    private final NoteService noteService;
+
+//    TODO 게시판 분리
+
+    @ModelAttribute("requestURI")
+    public String requestURI(HttpServletRequest request) {
+        return request.getRequestURI();
+    }
+
+    @GetMapping("/list")
+    public String listForm(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
+
+        List<NoteForm> noteForms = noteService.findPage(page).stream().map(NoteForm::new).collect(Collectors.toList());
+        Long totalPages = (noteService.findNoteCount() / 10) + 1;
+        String categoryForm = "";
+
+        log.info("totalPages: {}", totalPages);
+
+        addListFormToModel(model, categoryForm, noteForms, totalPages);
+        return "form/listForm";
+    }
+
+    @GetMapping("/search")
+    public String searchResult(@RequestParam(value = "searchType", defaultValue = "") String searchType,
+                               @RequestParam(value = "keyword", defaultValue = "") String keyword,
+                               @RequestParam(value = "page", defaultValue = "1") int page,
+                               Model model) {
+
+        List<NoteForm> noteForms = noteService.searchPage(page, keyword, searchType).stream().map(NoteForm::new).collect(Collectors.toList());
+        Long totalPages = (noteService.searchNoteCount(keyword, searchType) / 10) + 1;
+        String categoryForm = "";
+
+        log.info("totalPages: {}", totalPages);
+
+        addListFormToModel(model, categoryForm, noteForms, totalPages);
+        return "form/listForm";
+    }
+
+    private static void addListFormToModel(Model model, String categoryForm, List<NoteForm> noteForms, Long totalPages) {
+        model.addAttribute("categoryForm", categoryForm);
+        model.addAttribute("notes", noteForms);
+        model.addAttribute("totalPages", totalPages);
+    }
+
+}

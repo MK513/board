@@ -34,7 +34,7 @@ public class CategoryController {
         model.addAttribute("categoryForm", new CategoryForm());
         model.addAttribute("categories", categoryService.findAll());
 
-        return "category/manageCategoryForm";
+        return "form/manageCategoryForm";
     }
 
     @PostMapping("/create")
@@ -44,18 +44,18 @@ public class CategoryController {
         if (categoryService.findByName(categoryForm.getName()) != null) {
             bindingResult.reject("duplicatedError", "이미 존재하는 카테고리입니다.");
             model.addAttribute("categories", categoryService.findAll());
-            return "category/manageCategoryForm";
+            return "form/manageCategoryForm";
         }
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("categories", categoryService.findAll());
-            return "category/manageCategoryForm";
+            return "form/manageCategoryForm";
         }
 
         categoryService.save(new Category(categoryForm));
         model.addAttribute("categories", categoryService.findAll());
 
-        return "category/manageCategoryForm";
+        return "form/manageCategoryForm";
     }
 
     @PostMapping("/remove")
@@ -64,12 +64,12 @@ public class CategoryController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("categories", categoryService.findAll());
-            return "category/manageCategoryForm";
+            return "form/manageCategoryForm";
         }
 
         categoryService.remove(categoryForm.getId());
         model.addAttribute("categories", categoryService.findAll());
 
-        return "category/manageCategoryForm";
+        return "form/manageCategoryForm";
     }
 }

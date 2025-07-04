@@ -1,12 +1,16 @@
 package kkmm.back.board.web.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import kkmm.back.board.domain.Service.CategoryService;
 import kkmm.back.board.domain.Service.CommentService;
+import kkmm.back.board.domain.Service.MemberService;
 import kkmm.back.board.domain.Service.NoteService;
-import kkmm.back.board.domain.model.*;
+import kkmm.back.board.domain.model.Category;
+import kkmm.back.board.domain.model.Comment;
+import kkmm.back.board.domain.model.Member;
+import kkmm.back.board.domain.model.Note;
 import kkmm.back.board.web.SessionConst;
+import kkmm.back.board.web.argumentResolver.Login;
 import kkmm.back.board.web.model.CommentForm;
 import kkmm.back.board.web.model.NoteForm;
 import lombok.RequiredArgsConstructor;
@@ -19,39 +23,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/board")
-@Slf4j
+@RequestMapping("/note")
 public class NoteController {
 
+    private final CategoryService categoryService;
+    private final MemberService memberService;
     private final NoteService noteService;
     private final CommentService commentService;
-    private final CategoryService categoryService;
 
-//    TODO 게시판 분리
-//    TODO 검색 기능 추가
 //    TODO 파일 올리기 (사진, 동영상)
-
-    @ModelAttribute("requestURI")
-    public String requestURI(HttpServletRequest request) {
-        return request.getRequestURI();
-    }
-
-    @GetMapping("/list")
-    public String listForm(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
-
-        List<NoteForm> noteForms = noteService.findPage(page).stream().map(NoteForm::new).collect(Collectors.toList());
-        Long totalPages = (noteService.findNoteCount() / 10) + 1;
-        String categoryForm = "";
-
-        log.info("totalPages: {}", totalPages);
-
-        model.addAttribute("categoryForm", categoryForm);
-        model.addAttribute("notes", noteForms);
-        model.addAttribute("totalPages", totalPages);
-        return "board/listForm";
-    }
 
     @GetMapping("/write")
     public String createForm(Model model) {
@@ -60,16 +43,17 @@ public class NoteController {
         model.addAttribute("categories", categories);
         model.addAttribute("note", new NoteForm());
 
-        return "board/writeNoteForm";
+        return "form/writeNoteForm";
     }
 
     @PostMapping("/write")
-    public String saveNote(@Validated @ModelAttribute("note") NoteForm noteForm, Model model, HttpSession session) {
+    public String saveNote(@Validated @ModelAttribute("note") NoteForm noteForm,
+                           @Login Member member,
+                           Model model) {
 
         log.info("noteForm={}", noteForm);
         log.info("id={}", noteForm.getCategoryId());
 
-        Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
         Category category = categoryService.findOne(noteForm.getCategoryId());
         Note note = new Note(noteForm, member, category);
 
@@ -81,27 +65,10 @@ public class NoteController {
         return "redirect:/board/list";
     }
 
-    @GetMapping("/search")
-    public String searchResult(@RequestParam(value = "searchType", defaultValue = "") String searchType,
-                               @RequestParam(value = "keyword", defaultValue = "") String keyword,
-                               @RequestParam(value = "page", defaultValue = "1") int page,
-                               Model model) {
-
-        List<NoteForm> noteForms = noteService.searchPage(page, keyword, searchType).stream().map(NoteForm::new).collect(Collectors.toList());
-        Long totalPages = (noteService.searchNoteCount(keyword, searchType) / 10) + 1;
-        String categoryForm = "";
-
-        log.info("totalPages: {}", totalPages);
-
-        model.addAttribute("categoryForm", categoryForm);
-        model.addAttribute("notes", noteForms);
-        model.addAttribute("totalPages", totalPages);
-
-        return "/board/listForm";
-    }
-
     @GetMapping("/view/{id}")
-    public String viewForm(@PathVariable Long id, Model model, HttpSession session) {
+    public String viewForm(@PathVariable Long id,
+                           @Login Member member,
+                           Model model) {
 
         Note note = noteService.findOne(id);
         noteService.increaseViewCount(id);
@@ -114,14 +81,8 @@ public class NoteController {
         // TODO 게시글, 댓글 출력시 개행 문자 적용 필요 - 각 줄별로 div 따로 적용?
         model.addAttribute("note", noteForm);
         model.addAttribute("comments", commentForms);
-        model.addAttribute("newComment", new CommentForm(getUsername(session)));
+        model.addAttribute("newComment", new CommentForm(member.getName()));
 
-        return "board/viewNoteForm";
+        return "form/viewNoteForm";
     }
-
-    private String getUsername(HttpSession session) {
-        Member member = (session == null) ? null : (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
-        return (member == null) ? "익명" : member.getName();
-    }
-
 }

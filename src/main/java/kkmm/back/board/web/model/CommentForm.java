@@ -12,6 +12,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class CommentForm {
 
+    public Long id;
+
+    public Long parentId;
+
     @NotEmpty
     public String contents;
 
@@ -20,6 +24,7 @@ public class CommentForm {
     public LocalDateTime createdAt;
 
     public CommentForm(Comment comment) {
+        this.id = comment.getId();
         this.contents = comment.getContents();
         this.author = comment.getMember().getName();
         this.createdAt = comment.getCreatedAt();

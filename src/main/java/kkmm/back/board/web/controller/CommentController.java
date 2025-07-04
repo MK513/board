@@ -7,8 +7,10 @@ import kkmm.back.board.domain.model.Comment;
 import kkmm.back.board.domain.model.Member;
 import kkmm.back.board.domain.model.Note;
 import kkmm.back.board.web.SessionConst;
+import kkmm.back.board.web.argumentResolver.Login;
 import kkmm.back.board.web.model.CommentForm;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/comment")
@@ -27,16 +30,19 @@ public class CommentController {
 
     // TODO 로그인 없이도 이용 가능하게 만들기? Comment와 Member를 느슨하게 연결할 방법 필요
     @PostMapping("/create/{id}")
-    public String createComment(@Validated @ModelAttribute("comment") CommentForm commentForm, @PathVariable("id") Long note_id,
-                                Model model, HttpServletRequest request) {
+    public String createComment(@Validated @ModelAttribute("comment") CommentForm commentForm,
+                                @PathVariable("id") Long note_id,
+                                @Login Member member) {
 
-        Member member = (Member) request.getSession(false).getAttribute(SessionConst.LOGIN_MEMBER);
+        log.info("createComment={}", commentForm);
+
+        Comment parentComment = commentService.findOne(commentForm.getParentId());
         Note note = noteService.findOne(note_id);
 
-        Comment comment = new Comment(commentForm, member, note);
+        Comment comment = new Comment(commentForm, member, note, parentComment);
 
         commentService.save(comment);
 
-        return "redirect:/board/view/" + note_id;
+        return "redirect:/note/view/" + note_id;
     }
 }

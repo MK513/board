@@ -16,6 +16,12 @@
           25/06/29 18:29
         </span>
     </div>
+    <div class="flex items-center text-gray-600 py-4 border-b space-x-4">
+      <a th:href="@{/board/login}" class="btn btn-outline-primary btn-sm rounded-xl"
+         role="button" th:text="#{label.member.login}">수정</a>
+      <a th:href="@{/member/login}" class="btn btn-outline-primary btn-sm rounded-xl"
+         role="button" th:text="#{label.member.login}">삭제</a>
+    </div>
     <div class="prose py-6 whitespace-pre-line border-b border-gray-200">
       <div th:utext="${note.contents}">내용</div>
     </div>

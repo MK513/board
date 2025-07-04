@@ -27,21 +27,20 @@ public class Note {
     @JoinColumn(name="member_id")
     private Member member;
 
-    private String title;
-
-    @Lob
-    private String content;
-
-    private LocalDateTime createdAt;
-
-    private int viewCount;
-
     @OneToMany(mappedBy = "note")
     private List<Comment> comments = new ArrayList<>();
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+
+    private String title;
+
+    private String content;
+
+    private LocalDateTime createdAt;
+
+    private int viewCount;
 
     public Note(NoteForm noteForm, Member member, Category category) {
         this.title = noteForm.getTitle();

@@ -27,6 +27,10 @@ public class MemberService {
         return member.getId();
     }
 
+    public Member findById(Long id) {
+        return memberRepository.findOne(id);
+    }
+
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email)
                 .getFirst();

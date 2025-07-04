@@ -12,6 +12,7 @@ import java.util.List;
 public class CategoryRepository {
 
     private final EntityManager em;
+    private final NoteRepository noteRepository;
 
     public void save(Category category) {
         em.persist(category);
