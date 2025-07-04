@@ -27,8 +27,6 @@ public class BoardController {
 
     private final NoteService noteService;
 
-//    TODO 게시판 분리
-
     @ModelAttribute("requestURI")
     public String requestURI(HttpServletRequest request) {
         return request.getRequestURI();

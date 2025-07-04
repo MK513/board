@@ -28,7 +28,6 @@ public class CommentController {
     private final CommentService commentService;
     private final NoteService noteService;
 
-    // TODO 로그인 없이도 이용 가능하게 만들기? Comment와 Member를 느슨하게 연결할 방법 필요
     @PostMapping("/create/{id}")
     public String createComment(@Validated @ModelAttribute("comment") CommentForm commentForm,
                                 @PathVariable("id") Long note_id,

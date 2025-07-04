@@ -23,9 +23,20 @@
             </div>
             <!-- 로그인 상태 -->
             <div th:if="${session.loginMember != null}" class="flex gap-3">
+                <!-- 로그아웃 버튼 -->
                 <form th:action="@{/member/logout}" method="post">
                     <button type="submit" class="btn btn-outline-primary btn-sm rounded-xl"
                             th:text="#{label.member.logout}">로그아웃</button>
+                </form>
+                <!-- 멤버 관리 페이지 이동 -->
+                // TODO 멤버 관리 페이지 이동 연결, 만들기
+                <form th:action="@{/member/logout}" method="post">
+                    <button type="submit"
+                            class="btn btn-circle btn-outline btn-sm"
+                            style="color: black; border-color: black;"
+                            th:text="${session.loginMember.name.substring(0, 1)}">
+                        이름
+                    </button>
                 </form>
             </div>
         </div>

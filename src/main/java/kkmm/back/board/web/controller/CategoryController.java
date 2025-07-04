@@ -43,18 +43,13 @@ public class CategoryController {
 
         if (categoryService.findByName(categoryForm.getName()) != null) {
             bindingResult.reject("duplicatedError", "이미 존재하는 카테고리입니다.");
-            model.addAttribute("categories", categoryService.findAll());
-            return "form/manageCategoryForm";
         }
 
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("categories", categoryService.findAll());
-            return "form/manageCategoryForm";
+        if (!bindingResult.hasErrors()) {
+            categoryService.save(new Category(categoryForm));
         }
 
-        categoryService.save(new Category(categoryForm));
         model.addAttribute("categories", categoryService.findAll());
-
         return "form/manageCategoryForm";
     }
 
@@ -62,14 +57,11 @@ public class CategoryController {
     public String removeCategory(@Validated @ModelAttribute CategoryForm categoryForm,
                                  BindingResult bindingResult, Model model) {
 
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("categories", categoryService.findAll());
-            return "form/manageCategoryForm";
+        if (!bindingResult.hasErrors()) {
+            categoryService.remove(categoryForm.getId());
         }
 
-        categoryService.remove(categoryForm.getId());
         model.addAttribute("categories", categoryService.findAll());
-
         return "form/manageCategoryForm";
     }
 }
