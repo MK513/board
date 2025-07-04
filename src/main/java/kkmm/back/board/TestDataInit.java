@@ -2,6 +2,8 @@ package kkmm.back.board;
 
 import jakarta.annotation.PostConstruct;
 import kkmm.back.board.domain.Service.CategoryService;
+import kkmm.back.board.domain.Service.MemberService;
+import kkmm.back.board.domain.Service.NoteService;
 import kkmm.back.board.domain.model.Category;
 import kkmm.back.board.domain.model.Member;
 import kkmm.back.board.domain.model.Note;
@@ -31,8 +33,8 @@ public class TestDataInit {
     @RequiredArgsConstructor
     static class InitService {
 
-        private final MemberRepository memberRepository;
-        private final NoteRepository noteRepository;
+        private final MemberService memberService;
+        private final NoteService noteService;
         private final CategoryService categoryService;
 
         private final Random random = new Random();
@@ -40,10 +42,11 @@ public class TestDataInit {
         @Transactional
         public void initData() {
             // 1) 회원 생성
-            Member alice = new Member("alice@example.com", "alicePass1!", "Alice");
-            Member bob   = new Member("123",   "123",   "Bob");
-            memberRepository.save(alice);
-            memberRepository.save(bob);
+            Long alice1 = memberService.join("Alice", "alice@example.com", "alicePass1!");
+            Long bob1 = memberService.join("Bob", "123", "123");
+
+            Member alice = memberService.findById(alice1);
+            Member bob = memberService.findById(bob1);
 
             Category category = categoryService.findOne(1L);
 
@@ -85,7 +88,7 @@ public class TestDataInit {
                         .minusMinutes(random.nextInt(60));
                 note.setCreatedAt(randomTime);
 
-                noteRepository.save(note);
+                noteService.saveNote(note);
             }
 
         }

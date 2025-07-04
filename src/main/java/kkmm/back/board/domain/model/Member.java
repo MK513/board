@@ -33,17 +33,10 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Comment> comments = new ArrayList<>();
 
-    public Member(String email, String password, String name) {
+    public Member(String name, String email, String password) {
+        this.name = name;
         this.email = email;
         this.password = password;
-        this.name = name;
-        this.joinedAt = LocalDateTime.now();
-    }
-
-    public Member(SignupForm signupForm) {
-        this.name = signupForm.getName();
-        this.email = signupForm.getEmail();
-        this.password = signupForm.getPassword();
         this.joinedAt = LocalDateTime.now();
     }
 }

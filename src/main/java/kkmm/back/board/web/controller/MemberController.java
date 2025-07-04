@@ -41,9 +41,7 @@ public class MemberController {
 
         log.info("signup");
 
-        Member member = new Member(signupForm);
-
-        memberService.save(member);
+        memberService.join(signupForm.getName(), signupForm.getEmail(), signupForm.getPassword());
 
         return "redirect:/board/list";
     }
