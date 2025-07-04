@@ -15,12 +15,16 @@
       <span th:text="${#temporals.format(note.createdAt, 'yy/MM/dd HH:mm')}">
           25/06/29 18:29
         </span>
-    </div>
-    <div class="flex items-center text-gray-600 py-4 border-b space-x-4">
-      <a th:href="@{/board/login}" class="btn btn-outline-primary btn-sm rounded-xl"
-         role="button" th:text="#{label.member.login}">수정</a>
-      <a th:href="@{/member/login}" class="btn btn-outline-primary btn-sm rounded-xl"
-         role="button" th:text="#{label.member.login}">삭제</a>
+
+      <div th:if="${session.loginMember != null and session.loginMember.name.equals(note.author)}">
+        <a th:href="@{/note/edit/{id}(id=${note.id})}" class="btn btn-outline-primary btn-sm rounded-xl"
+           role="button" th:text="#{label.correction}">수정</a>
+        <form th:action="@{/note/delete/{id}(id=${note.id})}" method="post" style="display:inline;">
+          <input type="hidden" name="_method" value="delete"/>
+          <button type="submit" class="btn btn-outline-primary btn-sm rounded-xl"
+                  th:text="#{label.remove}">삭제</button>
+        </form>
+      </div>
     </div>
     <div class="prose py-6 whitespace-pre-line border-b border-gray-200">
       <div th:utext="${note.contents}">내용</div>

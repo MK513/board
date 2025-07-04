@@ -45,14 +45,16 @@ public class Note {
     public Note(NoteForm noteForm, Member member, Category category) {
         this.title = noteForm.getTitle();
         this.content = noteForm.getContents();
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = noteForm.getCreatedAt() == null ? LocalDateTime.now() : noteForm.getCreatedAt();
         this.viewCount = 0;
         this.member = member;
         this.category = category;
     }
 
-
-
+    public void updateContent(NoteForm noteForm) {
+        this.content = noteForm.getContents();
+        this.title = noteForm.getTitle();
+    }
 
     // Test Data 처리용
 
@@ -68,5 +70,6 @@ public class Note {
         this.category = category;
         this.viewCount = 0;
     }
+
 
 }

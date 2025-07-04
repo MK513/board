@@ -1,7 +1,6 @@
 package kkmm.back.board.domain.Service;
 
 import kkmm.back.board.domain.model.Note;
-import kkmm.back.board.domain.model.SearchType;
 import kkmm.back.board.domain.repository.NoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,11 +40,14 @@ public class NoteService {
     public Long searchNoteCount(String keyword, String searchType) {
         return noteRepository.searchNoteCount(keyword, searchType);
     }
+
     @Transactional
     public void increaseViewCount(Long id) {
         noteRepository.increaseViewCount(id);
     }
 
-
-
+    @Transactional
+    public void deleteNote(Long id) {
+        noteRepository.deleteById(id);
+    }
 }

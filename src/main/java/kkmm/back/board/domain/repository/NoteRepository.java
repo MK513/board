@@ -2,6 +2,7 @@ package kkmm.back.board.domain.repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import kkmm.back.board.domain.model.Category;
 import kkmm.back.board.domain.model.Note;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -127,6 +128,11 @@ public class NoteRepository {
         }
 
         return query.getSingleResult();
+    }
+
+    public void deleteById(Long id) {
+        Note note = em.find(Note.class, id);
+        if (note != null) em.remove(note);
     }
 
 }
