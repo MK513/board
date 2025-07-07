@@ -1,18 +1,51 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<!-- 댓글 섹션 -->
 <div th:fragment="commentSection" class="mt-8 mx-auto px-4">
-  <h3 class="text-xl font-semibold mb-4" th:text="#{label.comment}">댓글</h3>
-    <!-- 댓글 목록 -->
+    <h3 class="text-xl font-semibold mb-4" th:text="#{label.comment}">댓글</h3>
     <ul class="space-y-4">
-        <li th:each="comment : ${comments}" class="border-b border-gray-200 pb-4">
-            <div class="flex justify-between items-center mb-2 text-sm text-gray-600">
-                <span class="font-medium" th:text="${comment.author}">작성자</span>
-                <time th:text="${#temporals.format(comment.createdAt, 'yy/MM/dd HH:mm')}">작성일</time>
-            </div>
-            <p th:utext="${comment.contents}" class="text-gray-700 text-sm whitespace-pre-line">댓글 내용</p>
+        <li th:each="comment : ${comments}" class="border-b border-gray-200 pb-4"
+            th:classappend="${'pl-' + (comment.depth * 4)}">
+            <div class="flex flex-col">
+                <div class="flex justify-between items-start mb-1 text-sm text-gray-600">
+                    <span class="font-medium" th:text="${comment.author}">작성자</span>
+                    <time th:text="${#temporals.format(comment.createdAt, 'yy/MM/dd HH:mm')}">작성일</time>
+                </div>
 
-            <!-- 답글쓰기 버튼 -->
+                <p th:id="${'comment-content-' + comment.id}" th:utext="${comment.contents}"
+                   class="text-gray-700 text-sm whitespace-pre-line mb-2">댓글 내용</p>
+
+                <div th:id="${'edit-form-' + comment.id}" class="hidden mt-2">
+                    <form th:action="@{/comment/edit/{id}(id=${note.id})}" method="post" th:object="${updateComment}" class="space-y-2">
+                        <input type="hidden" name="id" th:value="${comment.id}"/>
+                        <input type="hidden" name="_method" value="put" />
+                        <textarea
+                            name="contents"
+                            rows="2"
+                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring text-sm resize-none"
+                            th:text="${comment.contents}">내용</textarea>
+                        <div class="flex justify-end space-x-2">
+                            <button type="submit" class="px-3 py-1 bg-blue-600 text-white rounded text-sm">저장</button>
+                            <button type="button" onclick="cancelEdit(this)"
+                                    th:attr="data-id=${comment.id}"
+                                    class="px-3 py-1 bg-gray-300 text-gray-800 rounded text-sm">취소</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div th:if="${session.loginMember != null and session.loginMember.name.equals(comment.author)}"
+                     class="flex justify-end text-xs space-x-2 mt-auto">
+                    <button type="button"
+                            onclick="toggleEditForm(this)"
+                            th:attr="data-id=${comment.id}"
+                            class="text-blue-500 hover:text-blue-700">수정</button>
+                    <form th:action="@{/comment/delete/{id}(id=${note.id}, commentId=${comment.id})}" method="post"
+                          onsubmit="return confirm('정말로 삭제하시겠습니까?');">
+                        <input type="hidden" name="_method" value="delete"/>
+                        <button type="submit" class="text-red-500 hover:text-red-700">삭제</button>
+                    </form>
+                </div>
+            </div>
+
             <div class="mt-2">
                 <button
                         type="button"
@@ -24,7 +57,6 @@
                 </button>
             </div>
 
-            <!-- 대댓글 폼 (기본은 숨김) -->
             <div
                     th:attr="id=${'reply-form-' + comment.id}"
                     class="hidden mt-4 ml-6"
@@ -35,14 +67,12 @@
                         method="post"
                         class="space-y-2"
                 >
-                    <!-- 대댓글의 부모 commentId 전달 -->
-                    <input type="hidden" th:field="*{parentId}" th:value="${comment.id}" />
+                    <input type="hidden" name="parentId" th:value="${comment.id}"/>
 
-                    <!-- 작성자: session 에서 자동 처리하신다면 hidden 으로 넘기세요 -->
-                    <input type="hidden" name="author" th:value="${session.loginMember.name}" />
+                    <input type="hidden" name="author" th:value="${session.loginMember.name}"/>
 
                     <textarea
-                            id="reply-contents-[[${comment.id}]]"
+                            th:id="${'reply-contents-' + comment.id}"
                             th:field="*{contents}"
                             rows="2"
                             placeholder="답글을 입력하세요"
@@ -52,37 +82,61 @@
                         <button
                                 type="submit"
                                 class="px-3 py-1 bg-blue-600 text-white rounded text-sm"
-                        >등록</button>
+                        >등록
+                        </button>
                     </div>
                 </form>
             </div>
         </li>
     </ul>
 
-  <!-- 댓글 작성 폼 -->
-  <form th:action="@{/comment/create/{id}(id=${note.id})}" th:object="${newComment}"
-        method="post" class="mt-6 space-y-4">
-<!--    <div>-->
-<!--      <label for="author" class="block text-sm font-medium mb-1" th:text="#\{label.comment.author}">작성자</label>-->
-<!--      <input type="text" id="author" th:field="*{author}"-->
-<!--             placeholder="작성자 이름"-->
-<!--             class="w-full border rounded px-3 py-2 focus:outline-none focus:ring text-sm"/>-->
-<!--    </div>-->
-    <div>
-      <textarea id="contents" th:field="*{contents}" rows="3" placeholder="댓글을 입력하세요"
-                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring text-sm resize-none"></textarea>
-    </div>
-    <div class="flex justify-end">
-      <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded text-sm" th:text="#{label.register}">등록</button>
-    </div>
-  </form>
+    <form th:action="@{/comment/create/{id}(id=${note.id})}" th:object="${newComment}"
+          method="post" class="mt-6 space-y-4">
+        <div>
+            <input type="hidden" name="author" th:value="${session.loginMember.name}" />
+            <textarea id="contents" th:field="*{contents}" rows="3" placeholder="댓글을 입력하세요"
+                      class="w-full border rounded px-3 py-2 focus:outline-none focus:ring text-sm resize-none"></textarea>
+        </div>
+        <div class="flex justify-end">
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded text-sm" th:text="#{label.register}">
+                등록
+            </button>
+        </div>
+    </form>
 
-    <script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
         function toggleReplyForm(btn) {
-          const id = btn.getAttribute('data-id');
-          const form = document.getElementById('reply-form-' + id);
-          form.classList.toggle('hidden');
+            const id = btn.getAttribute('data-id');
+            const form = document.getElementById('reply-form-' + id);
+            form.classList.toggle('hidden');
         }
+
+        function toggleEditForm(btn) {
+            const id = btn.getAttribute('data-id');
+            const commentContent = document.getElementById('comment-content-' + id);
+            const editForm = document.getElementById('edit-form-' + id);
+            const editTextArea = document.getElementById('edit-textarea-' + id);
+
+            // 댓글 내용을 숨기고 수정 폼을 표시
+            commentContent.classList.add('hidden');
+            editForm.classList.remove('hidden');
+
+            // textarea에 현재 댓글 내용을 미리 채우고 포커스
+            editTextArea.value = commentContent.innerText.trim();
+            editTextArea.focus();
+        }
+
+        function cancelEdit(btn) {
+            const id = btn.getAttribute('data-id');
+            const commentContent = document.getElementById('comment-content-' + id);
+            const editForm = document.getElementById('edit-form-' + id);
+
+            // 수정 폼을 숨기고 댓글 내용을 다시 표시
+            editForm.classList.add('hidden');
+            commentContent.classList.remove('hidden');
+        }
+        /*]]>*/
     </script>
 </div>
 </html>

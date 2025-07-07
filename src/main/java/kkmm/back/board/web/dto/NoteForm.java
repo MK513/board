@@ -1,4 +1,4 @@
-package kkmm.back.board.web.model;
+package kkmm.back.board.web.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import kkmm.back.board.domain.model.Note;

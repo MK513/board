@@ -10,8 +10,8 @@ import kkmm.back.board.domain.model.Comment;
 import kkmm.back.board.domain.model.Member;
 import kkmm.back.board.domain.model.Note;
 import kkmm.back.board.web.argumentResolver.Login;
-import kkmm.back.board.web.model.CommentForm;
-import kkmm.back.board.web.model.NoteForm;
+import kkmm.back.board.web.dto.CommentForm;
+import kkmm.back.board.web.dto.NoteForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
 public class NoteController {
 
     private final CategoryService categoryService;
-    private final MemberService memberService;
     private final NoteService noteService;
     private final CommentService commentService;
 
@@ -89,6 +88,7 @@ public class NoteController {
         // TODO 게시글, 댓글 출력시 개행 문자 적용 필요 - 각 줄별로 div 따로 적용?
         model.addAttribute("note", noteForm);
         model.addAttribute("comments", commentForms);
+        model.addAttribute("updateComment", new CommentForm());
         model.addAttribute("newComment", new CommentForm(member != null ? member.getName() : null));
 
         return "form/viewNoteForm";
@@ -108,19 +108,16 @@ public class NoteController {
     @PutMapping("/edit/{id}")
     public String editNote(@Validated @ModelAttribute("note") NoteForm noteForm,
                            @PathVariable Long id,
-                           Model model,
-                           RedirectAttributes redirectAttributes) {
+                           Model model) {
 
-        Note note = noteService.findOne(id);
-        note.updateContent(noteForm);
-        noteService.saveNote(note);
+        noteService.updateNote(id, noteForm.getTitle(), noteForm.getContents());
 
-        redirectAttributes.addAttribute("id", id);
-        return "redirect:/note/view/{id}";
+        return "redirect:/note/view/" + id;
     }
 
     @DeleteMapping("/delete/{id}")
     public String deleteNote(@PathVariable Long id) {
+
         noteService.deleteNote(id);
 
         return "redirect:/board/list";

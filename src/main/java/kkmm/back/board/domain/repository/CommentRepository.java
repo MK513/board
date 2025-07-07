@@ -25,7 +25,7 @@ public class CommentRepository {
     }
 
     public List<Comment> findCommentsByNoteId(Long noteId) {
-        return em.createQuery("select c from Comment c where c.note.id = :noteId", Comment.class)
+        return em.createQuery("select c from Comment c where c.note.id = :noteId order by c.seq, c.depth, c.createdAt", Comment.class)
                 .setParameter("noteId", noteId)
                 .getResultList();
     }
@@ -34,5 +34,10 @@ public class CommentRepository {
         return em.createQuery("select m from Member m where m.email = :email", Member.class)
                 .setParameter("email", email)
                 .getResultList();
+    }
+
+    public void deleteById(Long id) {
+        Comment comment = em.find(Comment.class, id);
+        if (comment != null) em.remove(comment);
     }
 }

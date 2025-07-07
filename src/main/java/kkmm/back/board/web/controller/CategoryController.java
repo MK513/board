@@ -2,9 +2,7 @@ package kkmm.back.board.web.controller;
 
 import kkmm.back.board.domain.Service.CategoryService;
 import kkmm.back.board.domain.model.Category;
-import kkmm.back.board.web.model.CategoryForm;
-import kkmm.back.board.web.model.CommentForm;
-import lombok.Getter;
+import kkmm.back.board.web.dto.CategoryForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -15,8 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
 
 @Slf4j
 @Controller

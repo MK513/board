@@ -1,7 +1,8 @@
 package kkmm.back.board.domain.model;
 
 import jakarta.persistence.*;
-import kkmm.back.board.web.model.CommentForm;
+import jakarta.validation.constraints.NotEmpty;
+import kkmm.back.board.web.dto.CommentForm;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,10 +22,13 @@ public class Comment {
     @Column(name = "comment_id")
     private Long id;
 
-    @Lob
     private String contents;
 
     private LocalDateTime createdAt;
+
+    private int depth;
+
+    private int seq;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "note_id")
@@ -34,7 +38,6 @@ public class Comment {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    //TODO 대댓글 기능 추가
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "parent_id")
     private Comment parent;
@@ -48,5 +51,11 @@ public class Comment {
         this.note = note;
         this.member = member;
         this.parent = parentComment;
+        this.depth = parentComment == null ? 0 : parentComment.getDepth() + 1;
+        this.seq = parentComment == null ? note.getComments().size() : parentComment.getSeq();
+    }
+
+    public void updateContents(@NotEmpty String contents) {
+        this.contents = contents;
     }
 }

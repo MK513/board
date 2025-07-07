@@ -1,5 +1,6 @@
 package kkmm.back.board.domain.Service;
 
+import jakarta.validation.constraints.NotEmpty;
 import kkmm.back.board.domain.model.Note;
 import kkmm.back.board.domain.repository.NoteRepository;
 import lombok.RequiredArgsConstructor;
@@ -49,5 +50,12 @@ public class NoteService {
     @Transactional
     public void deleteNote(Long id) {
         noteRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void updateNote(Long id, @NotEmpty String title, @NotEmpty String content) {
+        Note note = noteRepository.findOne(id);
+        note.updateContent(title, content);
+        noteRepository.save(note);
     }
 }

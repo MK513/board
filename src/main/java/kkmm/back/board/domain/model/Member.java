@@ -1,7 +1,6 @@
 package kkmm.back.board.domain.model;
 
 import jakarta.persistence.*;
-import kkmm.back.board.web.model.SignupForm;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

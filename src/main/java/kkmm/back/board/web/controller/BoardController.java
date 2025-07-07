@@ -1,19 +1,12 @@
 package kkmm.back.board.web.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import kkmm.back.board.domain.Service.CategoryService;
-import kkmm.back.board.domain.Service.CommentService;
 import kkmm.back.board.domain.Service.NoteService;
-import kkmm.back.board.domain.model.*;
-import kkmm.back.board.web.SessionConst;
-import kkmm.back.board.web.model.CommentForm;
-import kkmm.back.board.web.model.NoteForm;
+import kkmm.back.board.web.dto.NoteForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

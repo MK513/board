@@ -1,7 +1,7 @@
 package kkmm.back.board.domain.model;
 
 import jakarta.persistence.*;
-import kkmm.back.board.web.model.NoteForm;
+import kkmm.back.board.web.dto.NoteForm;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -27,12 +27,12 @@ public class Note {
     @JoinColumn(name="member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "note")
-    private List<Comment> comments = new ArrayList<>();
-
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @OneToMany(mappedBy = "note", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
 
     private String title;
 
@@ -51,9 +51,9 @@ public class Note {
         this.category = category;
     }
 
-    public void updateContent(NoteForm noteForm) {
-        this.content = noteForm.getContents();
-        this.title = noteForm.getTitle();
+    public void updateContent(String title, String content) {
+        this.content = content;
+        this.title = title;
     }
 
     // Test Data 처리용

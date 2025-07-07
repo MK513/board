@@ -1,8 +1,7 @@
-package kkmm.back.board.web.model;
+package kkmm.back.board.web.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import kkmm.back.board.domain.model.Comment;
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +15,10 @@ public class CommentForm {
 
     public Long parentId;
 
+    public int depth;
+
+    public int seq;
+
     @NotEmpty
     public String contents;
 
@@ -28,6 +31,9 @@ public class CommentForm {
         this.contents = comment.getContents();
         this.author = comment.getMember().getName();
         this.createdAt = comment.getCreatedAt();
+        this.depth = comment.getDepth();
+        this.seq = comment.getSeq();
+        this.parentId = comment.getParent() == null ? null : comment.getParent().getId();
     }
 
     public CommentForm(String author) {

@@ -1,5 +1,6 @@
 package kkmm.back.board.domain.Service;
 
+import jakarta.validation.constraints.NotEmpty;
 import kkmm.back.board.domain.model.Comment;
 import kkmm.back.board.domain.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +22,23 @@ public class CommentService {
         return comment.getId();
     }
 
-    public Comment findOne(Long id) {
-        return commentRepository.findOne(id);
+    @Transactional
+    public void updateComment(Long id, @NotEmpty String contents) {
+        Comment comment = commentRepository.findOne(id);
+        comment.updateContents(contents);
+        commentRepository.save(comment);
     }
 
     public List<Comment> findComments(Long id) {
         return commentRepository.findCommentsByNoteId(id);
     }
 
+    public Comment findOne(Long id) {
+        return commentRepository.findOne(id);
+    }
+
+    @Transactional
+    public void deleteComment(Long id) {
+        commentRepository.deleteById(id);
+    }
 }

@@ -1,7 +1,7 @@
 package kkmm.back.board.domain.model;
 
 import jakarta.persistence.*;
-import kkmm.back.board.web.model.CategoryForm;
+import kkmm.back.board.web.dto.CategoryForm;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package kkmm.back.board.web.model;
+package kkmm.back.board.web.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
