@@ -3,23 +3,28 @@ package kkmm.back.board.web.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import kkmm.back.board.domain.Service.CategoryService;
 import kkmm.back.board.domain.Service.CommentService;
-import kkmm.back.board.domain.Service.MemberService;
 import kkmm.back.board.domain.Service.NoteService;
-import kkmm.back.board.domain.model.Category;
-import kkmm.back.board.domain.model.Comment;
-import kkmm.back.board.domain.model.Member;
-import kkmm.back.board.domain.model.Note;
+import kkmm.back.board.domain.model.*;
 import kkmm.back.board.web.argumentResolver.Login;
 import kkmm.back.board.web.dto.CommentForm;
 import kkmm.back.board.web.dto.NoteForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriUtils;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +37,9 @@ public class NoteController {
     private final CategoryService categoryService;
     private final NoteService noteService;
     private final CommentService commentService;
+
+    @Value("${file.dir}")
+    private String fileDir;
 
 //    TODO 파일 올리기 (사진, 동영상)
 
@@ -54,19 +62,17 @@ public class NoteController {
     public String saveNote(@Validated @ModelAttribute("note") NoteForm noteForm,
                            @Login Member member,
                            RedirectAttributes redirectAttributes,
-                           Model model) {
+                           Model model) throws IOException {
 
         log.info("noteForm={}", noteForm);
+        log.info("file={}", noteForm.getAttachFile());
         log.info("id={}", noteForm.getCategoryId());
 
         Category category = categoryService.findOne(noteForm.getCategoryId());
-        Note note = new Note(noteForm, member, category);
 
-        Long id = noteService.saveNote(note);
-        categoryService.increaseCount(category);
+        Long id = noteService.saveNote(noteForm, member, category);
 
         redirectAttributes.addAttribute("id", id);
-
         return "redirect:/note/view/{id}";
     }
 
@@ -121,6 +127,26 @@ public class NoteController {
         noteService.deleteNote(id);
 
         return "redirect:/board/list";
+    }
+
+    @ResponseBody
+    @GetMapping("/images/{filename}")
+    public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
+        return new UrlResource("file:" + fileDir + filename);
+    }
+
+    @GetMapping("/download")
+    public ResponseEntity<Resource> download(@RequestParam("sn") String storeFileName,
+                                                @RequestParam("un") String uploadFileName,
+                                                Model model) throws MalformedURLException {
+
+        UrlResource resource = new UrlResource("file:" + fileDir + storeFileName);
+        String encodedUploadFileName = UriUtils.encode(uploadFileName, StandardCharsets.UTF_8);
+        String contentDisposition = "attachment; filename=\"" + resource.getFilename() + "\"";
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                .body(resource);
     }
 
 }

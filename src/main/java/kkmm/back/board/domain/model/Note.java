@@ -38,17 +38,25 @@ public class Note {
 
     private String content;
 
-    private LocalDateTime createdAt;
-
     private int viewCount;
 
-    public Note(NoteForm noteForm, Member member, Category category) {
+    private LocalDateTime createdAt;
+
+    @ElementCollection(fetch = LAZY)
+    private List<UploadFile> files;
+
+    @ElementCollection(fetch = LAZY)
+    private List<UploadFile> imageFiles;
+
+    public Note(NoteForm noteForm, Member member, Category category, List<UploadFile> files, List<UploadFile> imageFiles) {
         this.title = noteForm.getTitle();
         this.content = noteForm.getContents();
         this.createdAt = noteForm.getCreatedAt() == null ? LocalDateTime.now() : noteForm.getCreatedAt();
         this.viewCount = 0;
         this.member = member;
         this.category = category;
+        this.imageFiles = imageFiles;
+        this.files = files;
     }
 
     public void updateContent(String title, String content) {

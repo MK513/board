@@ -2,10 +2,13 @@ package kkmm.back.board.web.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import kkmm.back.board.domain.model.Note;
+import kkmm.back.board.domain.model.UploadFile;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -29,6 +32,12 @@ public class NoteForm {
 
     public String categoryName;
 
+    private List<MultipartFile> attachFile;
+    private List<UploadFile> files;
+
+    private List<MultipartFile> attachImageFile;
+    private List<UploadFile> imageFiles;
+
     private LocalDateTime createdAt;
 
     public NoteForm(Note note) {
@@ -41,5 +50,8 @@ public class NoteForm {
         this.commentCount = note.getComments().size();
         this.categoryId = note.getCategory().getId();
         this.categoryName = note.getCategory().getName();
+
+        this.files = note.getFiles();
+        this.imageFiles = note.getImageFiles();
     }
 }

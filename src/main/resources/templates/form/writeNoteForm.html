@@ -46,9 +46,15 @@
                           class="w-full h-48 border rounded px-3 py-2 focus:outline-none focus:ring resize-none"></textarea>
             </div>
             <div>
-                <label for="attachment" class="block mb-2 font-medium">첨부파일</label>
-                <input type="file" id="attachment" name="attachment"
-                       accept="image/*,application/pdf"
+                <label for="attachFile" class="block mb-2 font-medium">첨부파일</label>
+                <input type="file" id="attachFile" multiple="multiple" th:field="*{attachFile}"
+                       accept=""
+                       class="block w-full text-sm text-gray-600"/>
+            </div>
+            <div>
+                <label for="attachImageFile" class="block mb-2 font-medium">이미지파일</label>
+                <input type="file" id="attachImageFile" multiple="multiple" th:field="*{attachImageFile}"
+                       accept="image/*"
                        class="block w-full text-sm text-gray-600"/>
             </div>
             <div class="flex justify-end space-x-3 pt-4 border-t">
