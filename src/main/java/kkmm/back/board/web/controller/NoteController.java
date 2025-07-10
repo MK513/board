@@ -63,7 +63,7 @@ public class NoteController {
                            Model model) throws IOException {
 
         log.info("noteForm={}", noteForm);
-        log.info("file={}", noteForm.getAttachFile());
+        log.info("file={}", noteForm.getFiles());
         log.info("id={}", noteForm.getCategoryId());
 
         Category category = categoryService.findById(noteForm.getCategoryId());
@@ -114,7 +114,10 @@ public class NoteController {
                            @PathVariable Long id,
                            Model model) {
 
-        noteService.updateNote(id, noteForm.getTitle(), noteForm.getContents());
+        log.info("noteForm.getDeleteFiles()={}", noteForm.getDeleteFiles());
+        log.info("noteForm.getDeleteImages()={}", noteForm.getDeleteImages());
+
+        noteService.updateNote(id, noteForm);
 
         return "redirect:/note/view/" + id;
     }

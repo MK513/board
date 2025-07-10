@@ -10,7 +10,6 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-// TODO JPA REPOSITORY로 추후 업데이트 예정
 public class NoteRepositoryRegacy {
 
     private final EntityManager em;
@@ -41,7 +40,6 @@ public class NoteRepositoryRegacy {
                 .getResultList();
     }
 
-    // TODO 대소문자 통합 검색은 추후 JPA, querydsl 사용해서 구현 예정
     public List<Note> searchNotesRange(String searchType, String keyword, int from, int count) {
         // 1. 기본 SELECT 절
         StringBuilder jpql = new StringBuilder("select n from Note n");

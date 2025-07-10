@@ -32,11 +32,14 @@ public class NoteForm {
 
     public String categoryName;
 
-    private List<MultipartFile> attachFile;
-    private List<UploadFile> files;
+    private List<MultipartFile> files;
+    private List<MultipartFile> images;
 
-    private List<MultipartFile> attachImageFile;
-    private List<UploadFile> imageFiles;
+    private List<UploadFile> attachFiles;
+    private List<UploadFile> attachImages;
+
+    private List<String> deleteFiles;
+    private List<String> deleteImages;
 
     private LocalDateTime createdAt;
 
@@ -51,7 +54,10 @@ public class NoteForm {
         this.categoryId = note.getCategory().getId();
         this.categoryName = note.getCategory().getName();
 
-        this.files = note.getFiles();
-        this.imageFiles = note.getImageFiles();
+        this.attachFiles = note.getFiles();
+        this.attachImages = note.getImageFiles();
+
+        this.deleteFiles = null;
+        this.deleteImages = null;
     }
 }

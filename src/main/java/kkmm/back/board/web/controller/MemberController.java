@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     // TODO 멤버 관리 페이지 추가
-    // TODO 비밀번호 암호화 spring security 필요
 
     private final MemberService memberService;
 

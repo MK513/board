@@ -21,6 +21,20 @@ public class FileManager {
         return fileDir + fileName;
     }
 
+    public void deleteFiles(List<String> fileNames) {
+        if (fileNames == null || fileNames.isEmpty()) { return;}
+        for (String fileName : fileNames) {
+            deleteFile(fileName);
+        }
+    }
+
+    public void deleteFile(String fileName) {
+        File file = new File(getFullPath(fileName));
+        if (file.exists()) {
+            file.delete();
+        }
+    }
+
     public List<UploadFile> storeFiles(List<MultipartFile> files)  {
         if (files == null || files.isEmpty()) { return null;}
 

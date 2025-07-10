@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/category")
 public class CategoryController {
 
-    // TODO categories를 일괄적으로 처리할 수 있는 방법 없을까?
-
     private final CategoryService categoryService;
 
     @GetMapping("/manage")

@@ -29,8 +29,8 @@ public class NoteService {
     @Transactional
     public Long saveNote(NoteForm noteForm, Member member, Category category) {
 
-        List<UploadFile> uploadFiles = fileManager.storeFiles(noteForm.getAttachFile());
-        List<UploadFile> uploadImageFiles = fileManager.storeFiles(noteForm.getAttachImageFile());
+        List<UploadFile> uploadFiles = fileManager.storeFiles(noteForm.getFiles());
+        List<UploadFile> uploadImageFiles = fileManager.storeFiles(noteForm.getImages());
 
         Note note = new Note(noteForm, member, category, uploadFiles, uploadImageFiles);
 
@@ -71,9 +71,15 @@ public class NoteService {
     }
 
     @Transactional
-    public void updateNote(Long id, @NotEmpty String title, @NotEmpty String content) {
+    public void updateNote(Long id, NoteForm noteForm) {
         Note note = noteRepository.findById(id).orElseThrow();
-        note.updateContent(title, content);
-        noteRepository.save(note);
+
+        List<UploadFile> uploadFiles = fileManager.storeFiles(noteForm.getFiles());
+        List<UploadFile> uploadImageFiles = fileManager.storeFiles(noteForm.getImages());
+
+        fileManager.deleteFiles(noteForm.getDeleteFiles());
+        fileManager.deleteFiles(noteForm.getDeleteImages());
+
+        note.updateContent(noteForm, uploadFiles, uploadImageFiles);
     }
 }

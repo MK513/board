@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-// TODO JPA REPOSITORY로 추후 업데이트 예정
 public interface NoteRepository extends JpaRepository<Note, Long> {
 
     @Modifying

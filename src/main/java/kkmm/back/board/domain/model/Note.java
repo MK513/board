@@ -59,17 +59,25 @@ public class Note {
         this.files = files;
     }
 
-    public void updateContent(String title, String content) {
-        this.content = content;
-        this.title = title;
+    public void updateContent(NoteForm noteForm, List<UploadFile> uploadFiles, List<UploadFile> uploadImageFiles) {
+        this.title = noteForm.getTitle();;
+        this.content = noteForm.getContents();
+
+        this.files.addAll(uploadFiles);
+        this.imageFiles.addAll(uploadImageFiles);
+
+        // 일반 파일 삭제 처리
+        if (this.files != null && noteForm.getDeleteFiles() != null) {
+            this.files.removeIf(file -> noteForm.getDeleteFiles().contains(file.getStoreFileName()));
+        }
+
+        // 이미지 파일 삭제 처리
+        if (this.imageFiles != null && noteForm.getDeleteImages() != null) {
+            this.imageFiles.removeIf(imageFile -> noteForm.getDeleteImages().contains(imageFile.getStoreFileName()));
+        }
     }
 
     // Test Data 처리용
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public Note(Member member, String title, String content, Category category) {
         this.member = member;
         this.title = title;

@@ -12,7 +12,6 @@
               method="post" enctype="multipart/form-data"
               class="space-y-6 py-6">
 
-            <!-- 조건적으로 _method 필드 추가 -->
             <input type="hidden" name="_method"
                    th:if="${requestURI.startsWith('/note/edit')}"
                    value="put"/>
@@ -47,23 +46,86 @@
             </div>
             <div>
                 <label for="attachFile" class="block mb-2 font-medium">첨부파일</label>
-                <input type="file" id="attachFile" multiple="multiple" th:field="*{attachFile}"
+                <input type="file" id="attachFile" multiple="multiple" th:field="*{files}"
                        accept=""
                        class="block w-full text-sm text-gray-600"/>
+
+                <div th:if="${!#lists.isEmpty(note.attachFiles)}" id="existingAttachFiles" class="mt-2 text-sm text-gray-700">
+                    <div th:each="file : *{attachFiles}" th:id="${'file-' + file.storeFileName}" class="flex items-center justify-between py-1">
+                        <span th:text="${file.uploadFileName}"></span>
+                        <button type="button"
+                                class="ml-2 text-red-500 hover:text-red-700"
+                                th:data-file-id="${file.storeFileName}"
+                                data-file-type="general"
+                                onclick="removeExistingFile(this)">
+                            <span style="color: red; font-weight: bold;">X</span>
+                        </button>
+                        <input type="hidden" name="existingFileIds" th:value="${file.storeFileName}" />
+                    </div>
+                </div>
             </div>
+
             <div>
                 <label for="attachImageFile" class="block mb-2 font-medium">이미지파일</label>
-                <input type="file" id="attachImageFile" multiple="multiple" th:field="*{attachImageFile}"
+                <input type="file" id="attachImageFile" multiple="multiple" th:field="*{images}"
                        accept="image/*"
                        class="block w-full text-sm text-gray-600"/>
+
+                <div th:if="${!#lists.isEmpty(note.attachImages)}" id="existingAttachImageFiles" class="mt-2 text-sm text-gray-700">
+                    <div th:each="image : *{attachImages}" th:id="${'file-' + image.storeFileName}" class="flex items-center justify-between py-1">
+                        <span th:text="${image.uploadFileName}"></span>
+                        <button type="button"
+                                class="ml-2 text-red-500 hover:text-red-700"
+                                th:data-file-id="${image.storeFileName}"
+                                data-file-type="image"
+                                onclick="removeExistingFile(this)">
+                            <span style="color: red; font-weight: bold;">X</span>
+                        </button>
+                        <input type="hidden" name="existingImageFileIds" th:value="${image.storeFileName}" />
+                    </div>
+                </div>
             </div>
+
+            <input type="hidden" id="deleteFiles" th:field="*{deleteFiles}" value="" />
+            <input type="hidden" id="deleteImages" th:field="*{deleteImages}" value="" />
             <div class="flex justify-end space-x-3 pt-4 border-t">
                 <button type="reset" class="px-4 py-2 border rounded"
-                        th:onclick="|location.href='@{/' }|">취소</button>
+                        th:onclick="|location.href='@{/}'|">취소</button>
                 <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">등록</button>
             </div>
         </form>
     </div>
 </div>
+<script>
+    let deleteFiles = []; // 삭제될 일반 파일 ID를 저장할 배열
+    let deleteImages = [];   // 삭제될 이미지 파일 ID를 저장할 배열
+
+    function removeExistingFile(buttonElement) {
+        const fileId = buttonElement.getAttribute('data-file-id');
+        const fileType = buttonElement.getAttribute('data-file-type'); // 파일 타입 가져오기
+        const fileDiv = document.getElementById('file-' + fileId);
+
+        if (fileDiv) {
+            fileDiv.remove(); // 화면에서 파일 요소 제거
+
+            if (fileType === 'general') {
+                deleteFiles.push(fileId); // 일반 파일 배열에 추가
+                // 일반 파일 Hidden Input 업데이트
+                document.getElementById('deleteFiles').value = deleteFiles.join(',');
+            } else if (fileType === 'image') {
+                deleteImages.push(fileId); // 이미지 파일 배열에 추가
+                // 이미지 파일 Hidden Input 업데이트
+                document.getElementById('deleteImages').value = deleteImages.join(',');
+            }
+        }
+
+        // 해당 파일의 hidden input도 제거하여 폼 제출 시 전송되지 않도록 함
+        // (name이 "existingFileIds" 또는 "existingImageFileIds"인 필드)
+        const hiddenInput = fileDiv.querySelector('input[type="hidden"]');
+        if (hiddenInput) {
+            hiddenInput.remove();
+        }
+    }
+</script>
 </body>
 </html>

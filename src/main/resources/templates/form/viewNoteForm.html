@@ -27,17 +27,17 @@
       </div>
     </div>
     <div class="prose py-6 whitespace-pre-line border-b border-gray-200">
-      <div th:if="${!#lists.isEmpty(note.files)}" class="mb-3">
+      <div th:if="${!#lists.isEmpty(note.attachFiles)}" class="mb-3">
         <h4 class="text-base font-semibold text-gray-700 mb-1">첨부 파일</h4>
         <ul class="list-none text-sm">
-          <li th:each="file : ${note.files}" class="mb-1">
+          <li th:each="file : ${note.attachFiles}" class="mb-1">
             <a th:href="@{/note/download(sn=${file.getStoreFileName()}, un=${file.getUploadFileName()})}" th:text="${file.getUploadFileName()}"
               class="inline-block border border-black px-2 py-1 rounded-sm hover:bg-gray-100 hover:underline text-gray-800"></a>
           </li>
         </ul>
       </div>
-      <div th:utext="${note.contents}">내용</div>
-      <img th:each="image : ${note.imageFiles}" th:src="|/note/images/${image.getStoreFileName()}|" width="300" height="300"/>
+      <p th:text="${note.contents}">내용</p>
+      <img th:each="image : ${note.attachImages}" th:src="|/note/images/${image.getStoreFileName()}|" width="300" height="300"/>
     </div>
     <div th:replace="~{fragments/comment :: commentSection}" class="pt-4 border-t"></div>
   </div>

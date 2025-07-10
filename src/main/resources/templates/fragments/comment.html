@@ -11,7 +11,7 @@
                     <time th:text="${#temporals.format(comment.createdAt, 'yy/MM/dd HH:mm')}">작성일</time>
                 </div>
 
-                <p th:id="${'comment-content-' + comment.id}" th:utext="${comment.contents}"
+                <p th:id="${'comment-content-' + comment.id}" th:text="${comment.contents}"
                    class="text-gray-700 text-sm whitespace-pre-line mb-2">댓글 내용</p>
 
                 <div th:id="${'edit-form-' + comment.id}" class="hidden mt-2">
