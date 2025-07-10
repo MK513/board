@@ -1,19 +1,15 @@
 package kkmm.back.board;
 
-import jakarta.annotation.PostConstruct;
 import kkmm.back.board.domain.Service.CategoryService;
 import kkmm.back.board.domain.Service.MemberService;
 import kkmm.back.board.domain.Service.NoteService;
 import kkmm.back.board.domain.model.Category;
 import kkmm.back.board.domain.model.Member;
 import kkmm.back.board.domain.model.Note;
-import kkmm.back.board.domain.repository.MemberRepository;
-import kkmm.back.board.domain.repository.NoteRepository;
 import kkmm.back.board.web.dto.NoteForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -40,7 +36,7 @@ public class TestDataInit {
         Member alice = memberService.findById(alice1);
         Member bob = memberService.findById(bob1);
 
-        Category category = categoryService.findOne(1L);
+        Category category = categoryService.findById(1L);
 
         // 2) 샘플 제목과 내용 목록
         List<String> titles = Arrays.asList(

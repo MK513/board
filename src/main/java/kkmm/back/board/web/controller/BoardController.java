@@ -29,7 +29,7 @@ public class BoardController {
     public String listForm(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
 
         List<NoteForm> noteForms = noteService.findPage(page).stream().map(NoteForm::new).collect(Collectors.toList());
-        Long totalPages = (noteService.findNoteCount() / 10) + 1;
+        Long totalPages = (noteService.countNote() / 10) + 1;
         String categoryForm = "";
 
         log.info("totalPages: {}", totalPages);

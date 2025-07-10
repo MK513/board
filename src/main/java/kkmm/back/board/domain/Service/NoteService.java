@@ -6,6 +6,7 @@ import kkmm.back.board.domain.model.Member;
 import kkmm.back.board.domain.model.Note;
 import kkmm.back.board.domain.model.UploadFile;
 import kkmm.back.board.domain.repository.CategoryRepository;
+import kkmm.back.board.domain.repository.NoteQueryRepository;
 import kkmm.back.board.domain.repository.NoteRepository;
 import kkmm.back.board.web.dto.NoteForm;
 import kkmm.back.board.web.file.FileManager;
@@ -21,12 +22,12 @@ import java.util.List;
 public class NoteService {
 
     private final NoteRepository noteRepository;
+    private final NoteQueryRepository noteQueryRepository;
     private final CategoryRepository categoryRepository;
     private final FileManager fileManager;
 
     @Transactional
     public Long saveNote(NoteForm noteForm, Member member, Category category) {
-
 
         List<UploadFile> uploadFiles = fileManager.storeFiles(noteForm.getAttachFile());
         List<UploadFile> uploadImageFiles = fileManager.storeFiles(noteForm.getAttachImageFile());
@@ -34,29 +35,29 @@ public class NoteService {
         Note note = new Note(noteForm, member, category, uploadFiles, uploadImageFiles);
 
         noteRepository.save(note); // 노트 저장
-        categoryRepository.increaseCount(note.getCategory().getName()); // 카테고리 사용 수 증가
+        categoryRepository.increaseCount(note.getCategory().getId()); // 카테고리 사용 수 증가
 
         return note.getId();
     }
 
     public Note findOne(Long id) {
-        return noteRepository.findOne(id);
+        return noteRepository.findById(id).orElseThrow();
     }
 
     public List<Note> findPage(int page) {
-        return noteRepository.findNoteRange((page - 1) * 10, 10);
+        return noteQueryRepository.findNoteRange((page - 1) * 10, 10);
     }
 
     public List<Note> searchPage(int page, String keyword, String searchType) {
-        return noteRepository.searchNotesRange(searchType, keyword, (page - 1) * 10, 10);
+        return noteQueryRepository.searchNotesRange(searchType, keyword, (page - 1) * 10, 10);
     }
 
-    public Long findNoteCount() {
-        return noteRepository.findNoteCount();
+    public Long countNote() {
+        return noteRepository.count();
     }
 
     public Long searchNoteCount(String keyword, String searchType) {
-        return noteRepository.searchNoteCount(keyword, searchType);
+        return noteQueryRepository.countSearchedNotes(keyword, searchType);
     }
 
     @Transactional
@@ -71,7 +72,7 @@ public class NoteService {
 
     @Transactional
     public void updateNote(Long id, @NotEmpty String title, @NotEmpty String content) {
-        Note note = noteRepository.findOne(id);
+        Note note = noteRepository.findById(id).orElseThrow();
         note.updateContent(title, content);
         noteRepository.save(note);
     }

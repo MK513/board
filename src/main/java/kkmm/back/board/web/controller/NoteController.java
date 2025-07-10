@@ -41,8 +41,6 @@ public class NoteController {
     @Value("${file.dir}")
     private String fileDir;
 
-//    TODO 파일 올리기 (사진, 동영상)
-
     @ModelAttribute("requestURI")
     public String requestURI(HttpServletRequest request) {
         return request.getRequestURI();
@@ -68,7 +66,7 @@ public class NoteController {
         log.info("file={}", noteForm.getAttachFile());
         log.info("id={}", noteForm.getCategoryId());
 
-        Category category = categoryService.findOne(noteForm.getCategoryId());
+        Category category = categoryService.findById(noteForm.getCategoryId());
 
         Long id = noteService.saveNote(noteForm, member, category);
 
@@ -142,7 +140,7 @@ public class NoteController {
 
         UrlResource resource = new UrlResource("file:" + fileDir + storeFileName);
         String encodedUploadFileName = UriUtils.encode(uploadFileName, StandardCharsets.UTF_8);
-        String contentDisposition = "attachment; filename=\"" + resource.getFilename() + "\"";
+        String contentDisposition = "attachment; filename=\"" + encodedUploadFileName + "\"";
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)

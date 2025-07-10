@@ -1,52 +1,22 @@
 package kkmm.back.board.domain.repository;
 
-import jakarta.persistence.EntityManager;
 import kkmm.back.board.domain.model.Category;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-@Repository
-@RequiredArgsConstructor
-public class CategoryRepository {
+public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    private final EntityManager em;
-    private final NoteRepository noteRepository;
+    public List<Category> findByNameLike(String name);
 
-    public void save(Category category) {
-        em.persist(category);
-    }
+    @Modifying
+    @Query("update Category c set c.count = c.count + 1 where c.id = :id")
+    public void increaseCount(@Param("id") Long id);
 
-    public void deleteById(Long id) {
-        Category category = em.find(Category.class, id);
-        if (category != null) em.remove(category);
-    }
-
-    public Category findOne(Long id) {
-        return em.find(Category.class, id);
-    }
-
-    public List<Category> findAll() {
-        return em.createQuery("select c from Category c", Category.class)
-                .getResultList();
-    }
-
-    public List<Category> findByName(String name) {
-        return em.createQuery("select c from Category c where c.name = :name", Category.class)
-                .setParameter("name", name)
-                .getResultList();
-    }
-
-    public void increaseCount(String name) {
-        em.createQuery("update Category c set c.count = c.count + 1 where c.name = : name")
-                .setParameter("name", name)
-                .executeUpdate();
-    }
-
-    public void decreaseCount(String name) {
-        em.createQuery("update Category c set c.count = c.count - 1 where c.name = : name")
-                .setParameter("name", name)
-                .executeUpdate();
-    }
+    @Modifying
+    @Query("update Category c set c.count = c.count - 1 where c.id = :id")
+    public void decreaseCount(@Param("id") Long id);
 }

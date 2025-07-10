@@ -3,6 +3,7 @@ package kkmm.back.board.domain.Service;
 import jakarta.validation.constraints.NotEmpty;
 import kkmm.back.board.domain.model.Comment;
 import kkmm.back.board.domain.repository.CommentRepository;
+import kkmm.back.board.domain.repository.jpa.CommentRepositoryRegacy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,17 +25,17 @@ public class CommentService {
 
     @Transactional
     public void updateComment(Long id, @NotEmpty String contents) {
-        Comment comment = commentRepository.findOne(id);
+        Comment comment = commentRepository.findById(id).orElseThrow();
         comment.updateContents(contents);
         commentRepository.save(comment);
     }
 
     public List<Comment> findComments(Long id) {
-        return commentRepository.findCommentsByNoteId(id);
+        return commentRepository.findAllByNoteId(id);
     }
 
     public Comment findOne(Long id) {
-        return commentRepository.findOne(id);
+        return commentRepository.findById(id).orElseThrow();
     }
 
     @Transactional
