@@ -25,7 +25,6 @@ Spring 생태계 전반(JPA, 인증·인가, 테스트, 배포)에 대한 경험
   - 첨부파일 업로드 (S3 또는 로컬)
 - **회원**
   - 회원가입 / 로그인 (Spring Security & BCrypt)
-  - OAuth2 소셜 로그인(Google, GitHub) · 선택 사항
   - 권한에 따른 메뉴/버튼 노출
 - **공통**
   - 전역 Exception 처리(ControllerAdvice)
