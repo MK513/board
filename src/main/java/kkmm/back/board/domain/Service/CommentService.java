@@ -27,7 +27,6 @@ public class CommentService {
     public void updateComment(Long id, @NotEmpty String contents) {
         Comment comment = commentRepository.findById(id).orElseThrow();
         comment.updateContents(contents);
-        commentRepository.save(comment);
     }
 
     public List<Comment> findComments(Long id) {

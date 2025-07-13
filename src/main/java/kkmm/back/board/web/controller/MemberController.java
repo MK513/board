@@ -26,8 +26,6 @@ import java.util.List;
 @RequestMapping("/member")
 public class MemberController {
 
-    // TODO 멤버 관리 페이지 추가
-
     private final MemberService memberService;
 
     @GetMapping("/signup")

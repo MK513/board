@@ -24,11 +24,11 @@ public class WebConfig implements WebMvcConfigurer {
         return new HiddenHttpMethodFilter();
     }
 
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new LoginCheckInterceptor())
-//                .order(1)
-//                .addPathPatterns("/**")
-//                .excludePathPatterns("/css/**", "/error", "/", "/member/**", "/board/list", "/.well-known/**");
-//    }
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LoginCheckInterceptor())
+                .order(1)
+                .addPathPatterns("/**")
+                .excludePathPatterns("/css/**", "/error", "/", "/member/login", "/member/signup", "/board/list", "/.well-known/**");
+    }
 }
