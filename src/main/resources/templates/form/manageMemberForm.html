@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko"
+      th:replace="~{layout/layoutMain :: common_body(~{::body})}">
+<body>
+<div class="flex-grow py-8">
+  <div class="max-w-4xl mx-auto px-4 bg-white">
+    <header class="py-6 border-b">
+      <h2 class="text-2xl font-semibold" th:text="#{label.manage.myActivity}">내 활동 관리</h2>
+    </header>
+
+    <div class="py-6 border-b">
+      <h3 class="text-xl font-semibold mb-4" th:text="#{label.manage.information}">회원 정보</h3>
+      <div class="space-y-2">
+        <p><strong th:text="#{label.manage.name} + ':'">사용자 이름:</strong> <span th:text="${session.loginMember.name}">회원명</span></p>
+        <p><strong th:text="#{label.manage.joinedAt} + ':'">가입일:</strong> <span th:text="${#temporals.format(session.loginMember.joinedAt, 'yy/MM/dd HH:mm')}">25/06/29 18:29</span></p>
+      </div>
+    </div>
+
+    <div class="py-6 border-b">
+      <h3 class="text-xl font-semibold mb-4" th:text="|#{label.manage.myNotes} [${totalNotesCount}]|">내가 쓴 게시글</h3>
+      <div th:if="${#lists.isEmpty(memberNotes)}" class="text-gray-600">
+        <p th:text="#{label.noteNotExist}">작성한 게시글이 없습니다.</p>
+      </div>
+      <div th:unless="${#lists.isEmpty(memberNotes)}" class="overflow-x-auto">
+        <table class="w-full table-auto text-left">
+          <thead>
+          <tr class="border-b border-gray-200 bg-gray-50">
+            <th class="px-4 py-2" th:text="#{label.category}">카테고리</th>
+            <th class="px-4 py-2" th:text="#{label.title}">제목</th>
+            <th class="px-4 py-2" th:text="#{label.author}">작성자</th>
+            <th class="px-4 py-2" th:text="#{label.viewCount}">조회수</th>
+            <th class="px-4 py-2" th:text="#{label.createdAt}">작성일</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="note : ${memberNotes}" class="hover:bg-gray-100">
+            <td class="px-4 py-3" th:text="${note.id}">1</td>
+            <td class="px-4 py-3" th:text="${note.categoryName}">카테고리</td>
+            <td class="px-4 py-3">
+              <div class="flex items-center space-x-2">
+                <a th:href="@{/note/view/{id}(id=${note.id})}"
+                   th:text="${note.title}"
+                   class="custom-href text-blue-600">제목</a>
+                <span class="text-gray-500 text-sm" th:text="'[' + ${note.commentCount} + ']'">[댓글수]</span>
+              </div>
+            </td>
+            <td class="px-4 py-3" th:text="${note.viewCount}">0</td>
+            <td class="px-4 py-3" th:text="${#temporals.format(note.createdAt, 'yy/MM/dd HH:mm')}">25/06/29 18:29</td>
+          </tr>
+          </tbody>
+        </table>
+        <div th:replace="~{fragments/memberPagination :: memberPagination(count=${totalNotesCount}, curPage=${noteCurPage}, baseUrl='/member/manage', paramName='notePage')}" class="mt-6"></div>
+      </div>
+    </div>
+
+    <div class="py-6">
+      <h3 class="text-xl font-semibold mb-4" th:text="|#{label.manage.myComments} [${totalCommentsCount}]|">내가 쓴 댓글</h3>
+      <div th:if="${#lists.isEmpty(memberComments)}" class="text-gray-600">
+        <p th:text="#{label.commentNotExist}">작성한 댓글이 없습니다.</p>
+      </div>
+      <div th:unless="${#lists.isEmpty(memberComments)}" class="space-y-4">
+        <div th:each="comment : ${memberComments}" class="border rounded-md p-4 bg-gray-50">
+          <p class="text-gray-800 mb-2" th:text="${comment.contents}">댓글 내용</p>
+          <div class="flex items-center text-sm text-gray-600 space-x-2">
+            <span th:text="${#temporals.format(comment.createdAt, 'yy/MM/dd HH:mm')}">25/06/29 18:29</span>
+            <span>-</span>
+            <span th:text="#{label.note} + ': '">게시글: <a th:href="@{/note/view/{id}(id=${comment.noteId})}" class="text-blue-600 hover:underline" th:text="${comment.noteTitle}">게시글 제목</a></span>
+          </div>
+        </div>
+        <div th:replace="~{fragments/memberPagination :: memberPagination(count=${totalCommentsCount}, curPage=${commentCurPage}, baseUrl='/member/manage', paramName='commentPage')}" class="mt-6"></div>
+      </div>
+    </div>
+
+    <div class="flex justify-end space-x-3 pt-4 border-t">
+      <button type="button" class="px-4 py-2 border rounded"
+              th:onclick="|location.href='@{/}'|"
+              th:text="#{label.goBack}">뒤로가기</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

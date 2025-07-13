@@ -89,7 +89,6 @@ public class NoteController {
 
         NoteForm noteForm = new NoteForm(note);
 
-        // TODO 게시글, 댓글 출력시 개행 문자 적용 필요 - 각 줄별로 div 따로 적용?
         model.addAttribute("note", noteForm);
         model.addAttribute("comments", commentForms);
         model.addAttribute("updateComment", new CommentForm());

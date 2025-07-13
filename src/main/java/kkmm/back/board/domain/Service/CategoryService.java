@@ -30,11 +30,6 @@ public class CategoryService {
         categoryRepository.deleteById(id);
     }
 
-    @Transactional
-    public void increaseCount(Category category) {
-        categoryRepository.increaseCount(category.getId());
-    }
-
     public Category findById(Long id) {
         return categoryRepository.findById(id).orElseThrow();
     }

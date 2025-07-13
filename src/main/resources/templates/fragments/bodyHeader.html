@@ -30,12 +30,12 @@
                 </form>
                 <!-- 멤버 관리 페이지 이동 -->
                 <!-- TODO 멤버 관리 페이지 이동 연결, 만들기 -->
-                <form th:action="@{/member/logout}" method="post">
+                <form th:action="@{/member/manage(notePage=1, commentPage=1)}" method="get">
                     <button type="submit"
                             class="btn btn-circle btn-outline btn-sm"
                             style="color: black; border-color: black;"
                             th:text="${session.loginMember.name.substring(0, 1)}">
-                        이름
+
                     </button>
                 </form>
             </div>

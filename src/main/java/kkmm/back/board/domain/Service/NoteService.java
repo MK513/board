@@ -1,6 +1,5 @@
 package kkmm.back.board.domain.Service;
 
-import jakarta.validation.constraints.NotEmpty;
 import kkmm.back.board.domain.model.Category;
 import kkmm.back.board.domain.model.Member;
 import kkmm.back.board.domain.model.Note;
@@ -52,11 +51,7 @@ public class NoteService {
         return noteQueryRepository.searchNotesRange(searchType, keyword, (page - 1) * 10, 10);
     }
 
-    public Long countNote() {
-        return noteRepository.count();
-    }
-
-    public Long searchNoteCount(String keyword, String searchType) {
+    public Long countSearchedNotes(String keyword, String searchType) {
         return noteQueryRepository.countSearchedNotes(keyword, searchType);
     }
 
@@ -81,5 +76,13 @@ public class NoteService {
         fileManager.deleteFiles(noteForm.getDeleteImages());
 
         note.updateContent(noteForm, uploadFiles, uploadImageFiles);
+    }
+
+    public Long countTotalPages() {
+        return (noteRepository.count() / 10) + 1;
+    }
+
+    public Long countSearchedPages(String keyword, String searchType) {
+        return (noteQueryRepository.countSearchedNotes(keyword, searchType) / 10) + 1;
     }
 }

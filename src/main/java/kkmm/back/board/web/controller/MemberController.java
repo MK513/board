@@ -5,7 +5,10 @@ import jakarta.servlet.http.HttpSession;
 import kkmm.back.board.domain.Service.MemberService;
 import kkmm.back.board.domain.model.Member;
 import kkmm.back.board.web.SessionConst;
+import kkmm.back.board.web.argumentResolver.Login;
+import kkmm.back.board.web.dto.CommentForm;
 import kkmm.back.board.web.dto.LoginForm;
+import kkmm.back.board.web.dto.NoteForm;
 import kkmm.back.board.web.dto.SignupForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +17,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -83,5 +88,32 @@ public class MemberController {
         }
 
         return "redirect:/board/list";
+    }
+
+    @GetMapping("/manage")
+    public String memberManageForm(@Login Member loginMember,
+                                   @RequestParam(required = false, defaultValue = "1", value = "notePage") int notePage,
+                                   @RequestParam(required = false, defaultValue = "1", value = "commentPage") int commentPage,
+                                   Model model) {
+
+        List<NoteForm> notes = memberService.findNotes(loginMember.getId(), notePage, 10).getContent()
+                .stream().map(NoteForm::new).toList();
+        List<CommentForm> comments = memberService.findComments(loginMember.getId(), commentPage, 10).getContent()
+                .stream().map(CommentForm::new).toList();
+
+        int totalNotesCount = memberService.countNotes(loginMember.getId());
+        int totalCommentsCount = memberService.countComments(loginMember.getId());
+
+        log.info("totalNotePages={}", totalNotesCount);
+        log.info("totalCommentPages={}", totalCommentsCount);
+
+        model.addAttribute("noteCurPage", notePage);
+        model.addAttribute("commentCurPage", commentPage);
+        model.addAttribute("totalNotesCount", totalNotesCount);
+        model.addAttribute("totalCommentsCount", totalCommentsCount);
+        model.addAttribute("memberNotes", notes);
+        model.addAttribute("memberComments", comments);
+
+        return "form/manageMemberForm";
     }
 }

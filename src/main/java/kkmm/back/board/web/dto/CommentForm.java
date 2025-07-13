@@ -13,6 +13,10 @@ public class CommentForm {
 
     public Long id;
 
+    public Long noteId;
+
+    public String noteTitle;
+
     public Long parentId;
 
     public int depth;
@@ -28,6 +32,8 @@ public class CommentForm {
 
     public CommentForm(Comment comment) {
         this.id = comment.getId();
+        this.noteId = comment.getNote().getId();
+        this.noteTitle = comment.getNote().getTitle();
         this.contents = comment.getContents();
         this.author = comment.getMember().getName();
         this.createdAt = comment.getCreatedAt();

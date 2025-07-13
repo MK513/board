@@ -1,21 +1,26 @@
 package kkmm.back.board.domain.Service;
 
+import kkmm.back.board.domain.model.Comment;
 import kkmm.back.board.domain.model.Member;
+import kkmm.back.board.domain.model.Note;
+import kkmm.back.board.domain.repository.CommentRepository;
 import kkmm.back.board.domain.repository.MemberRepository;
+import kkmm.back.board.domain.repository.NoteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -24,6 +29,9 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final NoteRepository noteRepository;
+    private final CommentRepository commentRepository;
+
     private final BCryptPasswordEncoder passwordEncoder;
     private final MessageSource messageSource;
 
@@ -71,6 +79,15 @@ public class MemberService {
         return member;
     }
 
+    public Page<Note> findNotes(Long memberId, int page, int size) {
+        PageRequest pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        return noteRepository.findByMemberId(memberId, pageable);
+    }
+
+    public Page<Comment> findComments(Long memberId, int page, int size) {
+        PageRequest pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        return commentRepository.findByMemberId(memberId, pageable);
+    }
 
     private void validateDuplicateMember(Member member) {
         Locale locale = LocaleContextHolder.getLocale();
@@ -78,5 +95,13 @@ public class MemberService {
         if (memberRepository.existsByEmail(member.getEmail())) {
             throw new IllegalStateException(messageSource.getMessage("login.error.duplicateEmail", null, locale));
         }
+    }
+
+    public int countNotes(Long memberId) {
+        return noteRepository.countByMemberId(memberId);
+    }
+
+    public int countComments(Long memberId) {
+        return commentRepository.countByMemberId(memberId);
     }
 }

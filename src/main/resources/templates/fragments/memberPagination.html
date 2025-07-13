@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="memberPagination(count, curPage, baseUrl, paramName)" class="mt-auto w-full bg-white shadow-inner py-4"
+     th:with="
+    curPage = ${curPage},
+    blockSize=10,
+    paramName=${paramName},
+    totalCount=${count} / 10 + 1,
+    startPage=${((curPage - 1) / blockSize) * blockSize + 1},
+    endPage=${(startPage + blockSize - 1) <= totalCount
+                   ? (startPage + blockSize - 1)
+                   : totalCount}">
+<div class="max-w-4xl mx-auto px-4">
+    <ul class="inline-flex space-x-2 justify-center w-full no-underline">
+
+            <li th:if="${startPage > blockSize}">
+                <a th:href="@{${baseUrl}(${paramName}=${startPage - blockSize})}"
+                   class="px-3 py-1 custom-href">&laquo;</a>
+            </li>
+            <li th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"
+                th:classappend="${pageNum == curPage} ? 'font-bold' : _">
+                <a th:href="@{${baseUrl}(${paramName}=${pageNum})}"
+                   th:text="${pageNum}"
+                   class="px-3 py-1 custom-href">1</a>
+            </li>
+            <li th:if="${endPage < totalCount}">
+                <a th:href="@{${baseUrl}(${paramName}=${startPage + blockSize})}"
+                   class="px-3 py-1 custom-href">&raquo;</a>
+            </li>
+        </ul>
+    </div>
+</div>
+</html>
