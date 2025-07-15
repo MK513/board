@@ -16,7 +16,7 @@ public class BoardApplication {
 		SpringApplication.run(BoardApplication.class, args);
 	}
 
-	@Bean
+	//@Bean
 	@Profile("local")
 	public TestDataInit testDataInit(MemberService memberService,
 									 NoteService noteService,

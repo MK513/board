@@ -34,8 +34,10 @@ public class Note {
     @OneToMany(mappedBy = "note", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
+    @Lob
     private String title;
 
+    @Lob
     private String content;
 
     private int viewCount;

@@ -22,6 +22,7 @@ public class Comment {
     @Column(name = "comment_id")
     private Long id;
 
+    @Lob
     private String contents;
 
     private LocalDateTime createdAt;

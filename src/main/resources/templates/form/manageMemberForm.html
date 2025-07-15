@@ -64,7 +64,8 @@
           <div class="flex items-center text-sm text-gray-600 space-x-2">
             <span th:text="${#temporals.format(comment.createdAt, 'yy/MM/dd HH:mm')}">25/06/29 18:29</span>
             <span>-</span>
-            <span th:text="#{label.note} + ': '">게시글: <a th:href="@{/note/view/{id}(id=${comment.noteId})}" class="text-blue-600 hover:underline" th:text="${comment.noteTitle}">게시글 제목</a></span>
+            <span th:text="|#{label.note}: |">게시글: </span>
+            <a th:href="@{/note/view/{id}(id=${comment.noteId})}" class="text-blue-600 hover:underline" th:text="${comment.noteTitle}">게시글 제목</a>
           </div>
         </div>
         <div th:replace="~{fragments/memberPagination :: memberPagination(count=${totalCommentsCount}, curPage=${commentCurPage}, baseUrl='/member/manage', paramName='commentPage')}" class="mt-6"></div>

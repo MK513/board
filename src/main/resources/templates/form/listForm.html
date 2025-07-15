@@ -4,7 +4,7 @@
 <body class="flex flex-col min-h-screen">
 <!-- 메인 콘텐츠 -->
 <div class="flex-grow py-8">
-  <div class="max-w-4xl mx-auto px-4">
+  <div class="max-w-5xl mx-auto px-4">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-2xl font-semibold" th:text="#{label.board.list}">게시판 목록</h2>
       <div th:if="${session.loginMember != null}">
@@ -16,36 +16,51 @@
 
       </div>
     </div>
-    <div class="overflow-x-auto">
-      <table class="w-full table-auto text-left">
+    <div class="max-w-6xl mx-auto px-4">
+      <table class="w-full table-fixed text-left">
         <thead>
         <tr class="border-b border-gray-200 bg-gray-50">
-          <th class="px-4 py-2">#</th>
-          <th class="px-4 py-2" th:text="#{label.category}">카테고리</th>
-          <th class="px-4 py-2" th:text="#{label.title}">제목</th>
-          <th class="px-4 py-2" th:text="#{label.author}">작성자</th>
-          <th class="px-4 py-2" th:text="#{label.viewCount}">조회수</th>
-          <th class="px-4 py-2" th:text="#{label.createdAt}">작성일</th>
+          <!-- 항상 한 줄 -->
+          <th class="whitespace-nowrap w-12  px-4 py-2">#</th>
+          <th class="whitespace-nowrap w-28 px-4 py-2" th:text="#{label.category}">카테고리</th>
+          <th class="px-4 py-2" th:text="#{label.title}">제목</th>           <!-- 제목만 줄바꿈 허용 -->
+          <th class="whitespace-nowrap w-24 px-4 py-2" th:text="#{label.author}">작성자</th>
+          <th class="whitespace-nowrap w-16 px-4 py-2" th:text="#{label.viewCount}">조회수</th>
+          <th class="whitespace-nowrap w-28 px-4 py-2" th:text="#{label.createdAt}">작성일</th>
         </tr>
         </thead>
+
         <tbody>
         <tr th:each="note : ${notes}" class="hover:bg-gray-100">
-          <td class="px-4 py-3" th:text="${note.id}">1</td>
-          <td class="px-4 py-3" th:text="${note.categoryName}">카테고리</td>
-          <td class="px-4 py-3">
-            <div class="flex items-center space-x-2">
+          <td class="whitespace-nowrap text-center px-4 py-3" th:text="${note.id}">1</td>
+
+          <td class="whitespace-nowrap px-4 py-3" th:text="${note.categoryName}">
+            자유게시판
+          </td>
+
+          <!-- 제목 : 길면 자동 줄바꿈, 필요하면 max‑w 로 폭 제한 -->
+          <td class="px-4 py-3 break-words">
+            <div class="flex flex-wrap items-center gap-x-2">
               <a th:href="@{/note/view/{id}(id=${note.id})}"
                  th:text="${note.title}"
-                 class="custom-href text-blue-600">제목</a>
-              <span class="text-gray-500 text-sm" th:text="'[' + ${note.commentCount} + ']'">[댓글수]</span>
+                 class="custom-href text-blue-600">
+                제목
+              </a>
+              <span class="text-gray-500 text-sm"
+                    th:text="'[' + ${note.commentCount} + ']'">[0]</span>
             </div>
           </td>
-          <td class="px-4 py-3" th:text="${note.author}">작성자</td>
-          <td class="px-4 py-3" th:text="${note.viewCount}">0</td>
-          <td class="px-4 py-3" th:text="${#temporals.format(note.createdAt, 'yy/MM/dd HH:mm')}">25/06/29 18:29</td>
+
+          <td class="whitespace-nowrap px-4 py-3" th:text="${note.author}">Alice</td>
+          <td class="whitespace-nowrap text-center px-4 py-3" th:text="${note.viewCount}">0</td>
+          <td class="whitespace-nowrap px-4 py-3"
+              th:text="${#temporals.format(note.createdAt,'yy/MM/dd HH:mm')}">
+            25/07/15 21:59
+          </td>
         </tr>
         </tbody>
       </table>
+
     </div>
   </div>
 </div>

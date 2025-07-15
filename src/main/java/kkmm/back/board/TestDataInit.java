@@ -36,6 +36,7 @@ public class TestDataInit {
         Member alice = memberService.findById(alice1);
         Member bob = memberService.findById(bob1);
 
+        categoryService.save(new Category("자유게시판"));
         Category category = categoryService.findById(1L);
 
         // 2) 샘플 제목과 내용 목록
