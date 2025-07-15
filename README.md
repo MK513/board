@@ -21,15 +21,16 @@ Spring 생태계 전반(JPA, 인증·인가, 테스트, 배포)에 대한 경험
 ## 3. 주요 기능
 - **게시판**
   - 글 목록 페이징 & 검색(제목/내용/작성자)
-  - 상세 보기, 글쓰기, 수정, 삭제(Soft Delete)
-  - 첨부파일 업로드 (S3 또는 로컬)
+  - 상세 보기, 글쓰기, 수정, 삭제
+  - 댓글 및 대댓글 쓰기, 수정, 삭제
+  - 첨부파일 업로드 
 - **회원**
   - 회원가입 / 로그인 (Spring Security & BCrypt)
+  - 정보 관리 페이
   - 권한에 따른 메뉴/버튼 노출
 - **공통**
   - 전역 Exception 처리(ControllerAdvice)
   - AOP 기반 로깅 · 성능 모니터링
-  - API 문서(Swagger 3 / SpringDoc)
   - GitHub Actions + DockerHub 자동 배포 파이프라인
 
 ## 4. 프로젝트 구조
