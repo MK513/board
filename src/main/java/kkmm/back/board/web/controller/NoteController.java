@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import kkmm.back.board.domain.Service.CategoryService;
 import kkmm.back.board.domain.Service.CommentService;
 import kkmm.back.board.domain.Service.NoteService;
+import kkmm.back.board.domain.dto.NoteDto;
 import kkmm.back.board.domain.model.*;
 import kkmm.back.board.web.argumentResolver.Login;
 import kkmm.back.board.web.dto.CommentForm;
@@ -68,7 +69,7 @@ public class NoteController {
 
         Category category = categoryService.findById(noteForm.getCategoryId());
 
-        Long id = noteService.saveNote(noteForm, member, category);
+        Long id = noteService.save(new NoteDto(noteForm), member, category);
 
         redirectAttributes.addAttribute("id", id);
         return "redirect:/note/view/{id}";
@@ -79,7 +80,7 @@ public class NoteController {
                            @Login Member member,
                            Model model) {
 
-        Note note = noteService.findOne(id);
+        Note note = noteService.findById(id);
         noteService.increaseViewCount(id);
 
         List<Comment> comments = commentService.findComments(id);
@@ -100,7 +101,7 @@ public class NoteController {
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable Long id, Model model) {
         List<Category> categories = categoryService.findAll();
-        NoteForm noteForm = new NoteForm(noteService.findOne(id));
+        NoteForm noteForm = new NoteForm(noteService.findById(id));
 
         model.addAttribute("categories", categories);
         model.addAttribute("note", noteForm);
@@ -116,7 +117,7 @@ public class NoteController {
         log.info("noteForm.getDeleteFiles()={}", noteForm.getDeleteFiles());
         log.info("noteForm.getDeleteImages()={}", noteForm.getDeleteImages());
 
-        noteService.updateNote(id, noteForm);
+        noteService.updateNote(id, new NoteDto(noteForm));
 
         return "redirect:/note/view/" + id;
     }

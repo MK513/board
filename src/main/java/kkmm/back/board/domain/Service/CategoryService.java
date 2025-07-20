@@ -3,7 +3,6 @@ package kkmm.back.board.domain.Service;
 import kkmm.back.board.domain.model.Category;
 import kkmm.back.board.domain.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,11 +17,11 @@ public class CategoryService {
 
     @Transactional
     public Long save(Category category) {
-        validateDuplicateMember(category);
+        validateDuplicateCategory(category);
 
-        categoryRepository.save(category);
+        Category saved = categoryRepository.save(category);
 
-        return category.getId();
+        return saved.getId();
     }
 
     @Transactional
@@ -35,19 +34,19 @@ public class CategoryService {
     }
 
     public Category findByName(String name) {
-        return categoryRepository.findByNameLike(name)
+        return categoryRepository.findByNameEquals(name)
                 .stream().findFirst()
-                .orElse(null);
+                .orElseThrow();
     }
 
     public List<Category> findAll() {
         return categoryRepository.findAll();
     }
 
-    private void validateDuplicateMember(Category category) {
-        List<Category> findCategory = categoryRepository.findByNameLike(category.getName());
+    private void validateDuplicateCategory(Category category) {
+        List<Category> findCategory = categoryRepository.findByNameEquals(category.getName());
         if (!findCategory.isEmpty()) {
-            throw new IllegalStateException("이미 사용중인 이메일 입니다.");
+            throw new IllegalStateException("이미 존재하는 카테고리입니다.");
         }
     }
 }

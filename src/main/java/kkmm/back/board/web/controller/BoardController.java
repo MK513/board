@@ -28,7 +28,7 @@ public class BoardController {
     @GetMapping("/list")
     public String listForm(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
 
-        List<NoteForm> noteForms = noteService.findPage(page).stream().map(NoteForm::new).collect(Collectors.toList());
+        List<NoteForm> noteForms = noteService.findNotes(page).stream().map(NoteForm::new).collect(Collectors.toList());
         Long totalPages = noteService.countTotalPages();
         String categoryForm = "";
 
@@ -44,7 +44,7 @@ public class BoardController {
                                @RequestParam(value = "page", defaultValue = "1") int page,
                                Model model) {
 
-        List<NoteForm> noteForms = noteService.searchPage(page, keyword, searchType).stream().map(NoteForm::new).collect(Collectors.toList());
+        List<NoteForm> noteForms = noteService.searchNotes(page, keyword, searchType).stream().map(NoteForm::new).collect(Collectors.toList());
         Long totalPages = noteService.countSearchedPages(keyword, searchType);
         String categoryForm = "";
 

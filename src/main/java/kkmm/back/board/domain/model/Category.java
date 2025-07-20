@@ -35,4 +35,8 @@ public class Category {
         this.name = categoryForm.getName();
         this.count = 0;
     }
+
+    public void increaseCount() {
+        count++;
+    }
 }

@@ -3,7 +3,10 @@ package kkmm.back.board.web.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import kkmm.back.board.domain.Service.MemberService;
+import kkmm.back.board.domain.dto.SignupDto;
+import kkmm.back.board.domain.model.Comment;
 import kkmm.back.board.domain.model.Member;
+import kkmm.back.board.domain.model.Note;
 import kkmm.back.board.web.SessionConst;
 import kkmm.back.board.web.argumentResolver.Login;
 import kkmm.back.board.web.dto.CommentForm;
@@ -12,6 +15,7 @@ import kkmm.back.board.web.dto.NoteForm;
 import kkmm.back.board.web.dto.SignupForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,7 +47,7 @@ public class MemberController {
 
         log.info("signup");
 
-        memberService.join(signupForm.getName(), signupForm.getEmail(), signupForm.getPassword());
+        memberService.join(new SignupDto(signupForm));
 
         return "redirect:/board/list";
     }

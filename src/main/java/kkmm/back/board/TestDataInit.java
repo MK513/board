@@ -3,6 +3,8 @@ package kkmm.back.board;
 import kkmm.back.board.domain.Service.CategoryService;
 import kkmm.back.board.domain.Service.MemberService;
 import kkmm.back.board.domain.Service.NoteService;
+import kkmm.back.board.domain.dto.NoteDto;
+import kkmm.back.board.domain.dto.SignupDto;
 import kkmm.back.board.domain.model.Category;
 import kkmm.back.board.domain.model.Member;
 import kkmm.back.board.domain.model.Note;
@@ -30,8 +32,8 @@ public class TestDataInit {
     public void init() {
 
         // 1) 회원 생성
-        Long alice1 = memberService.join("Alice", "alice@example.com", "alicePass1!");
-        Long bob1 = memberService.join("Bob", "123", "123");
+        Long alice1 = memberService.join(new SignupDto("Alice", "alice@example.com", "alicePass1!"));
+        Long bob1 = memberService.join(new SignupDto("Bob", "123", "123"));
 
         Member alice = memberService.findById(alice1);
         Member bob = memberService.findById(bob1);
@@ -77,7 +79,7 @@ public class TestDataInit {
                     .minusMinutes(random.nextInt(60));
             note.setCreatedAt(randomTime);
 
-            noteService.saveNote(new NoteForm(note), author, category);
+            noteService.save(new NoteDto(new NoteForm(note)), author, category);
         }
     }
 }

@@ -10,13 +10,13 @@ import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    public List<Category> findByNameLike(String name);
+    public List<Category> findByNameEquals(String name);
 
-    @Modifying
-    @Query("update Category c set c.count = c.count + 1 where c.id = :id")
-    public void increaseCount(@Param("id") Long id);
-
-    @Modifying
-    @Query("update Category c set c.count = c.count - 1 where c.id = :id")
-    public void decreaseCount(@Param("id") Long id);
+//    @Modifying
+//    @Query("update Category c set c.count = c.count + 1 where c.id = :id")
+//    public void increaseCount(@Param("id") Long id);
+//
+//    @Modifying
+//    @Query("update Category c set c.count = c.count - 1 where c.id = :id")
+//    public void decreaseCount(@Param("id") Long id);
 }

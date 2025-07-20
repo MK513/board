@@ -1,11 +1,9 @@
 package kkmm.back.board.domain.repository;
 
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import kkmm.back.board.domain.model.Note;
-import kkmm.back.board.domain.model.QNote;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -42,7 +40,7 @@ public class NoteQueryRepository {
                 .fetch();
     }
 
-    public Long countSearchedNotes(String keyword, String searchType) {
+    public Long countSearchedNotes(String searchType, String keyword) {
         return query.select(note.count())
                 .from(note)
                 .where(searchCond(searchType, keyword))

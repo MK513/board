@@ -1,6 +1,7 @@
 package kkmm.back.board.domain.model;
 
 import jakarta.persistence.*;
+import kkmm.back.board.domain.dto.NoteDto;
 import kkmm.back.board.web.dto.NoteForm;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -15,7 +16,6 @@ import static jakarta.persistence.FetchType.*;
 
 @Entity
 @Getter
-@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Note {
 
@@ -34,10 +34,9 @@ public class Note {
     @OneToMany(mappedBy = "note", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
-    @Lob
     private String title;
 
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     private int viewCount;
@@ -45,15 +44,15 @@ public class Note {
     private LocalDateTime createdAt;
 
     @ElementCollection(fetch = LAZY)
-    private List<UploadFile> files;
+    private List<UploadFile> files = new ArrayList<>();
 
     @ElementCollection(fetch = LAZY)
-    private List<UploadFile> imageFiles;
+    private List<UploadFile> imageFiles = new ArrayList<>();
 
-    public Note(NoteForm noteForm, Member member, Category category, List<UploadFile> files, List<UploadFile> imageFiles) {
-        this.title = noteForm.getTitle();
-        this.content = noteForm.getContents();
-        this.createdAt = noteForm.getCreatedAt() == null ? LocalDateTime.now() : noteForm.getCreatedAt();
+    public Note(NoteDto noteDto, Member member, Category category, List<UploadFile> files, List<UploadFile> imageFiles) {
+        this.title = noteDto.getTitle();
+        this.content = noteDto.getContents();
+        this.createdAt = noteDto.getCreatedAt() == null ? LocalDateTime.now() : noteDto.getCreatedAt();
         this.viewCount = 0;
         this.member = member;
         this.category = category;
@@ -61,21 +60,21 @@ public class Note {
         this.files = files;
     }
 
-    public void updateContent(NoteForm noteForm, List<UploadFile> uploadFiles, List<UploadFile> uploadImageFiles) {
-        this.title = noteForm.getTitle();;
-        this.content = noteForm.getContents();
+    public void updateContent(NoteDto noteDto, List<UploadFile> uploadFiles, List<UploadFile> uploadImageFiles) {
+        this.title = noteDto.getTitle();;
+        this.content = noteDto.getContents();
 
-        this.files.addAll(uploadFiles);
-        this.imageFiles.addAll(uploadImageFiles);
+        if (this.files != null) this.files.addAll(uploadFiles);
+        if (this.imageFiles != null) this.imageFiles.addAll(uploadImageFiles);
 
         // 일반 파일 삭제 처리
-        if (this.files != null && noteForm.getDeleteFiles() != null) {
-            this.files.removeIf(file -> noteForm.getDeleteFiles().contains(file.getStoreFileName()));
+        if (this.files != null && noteDto.getDeleteFiles() != null) {
+            this.files.removeIf(file -> noteDto.getDeleteFiles().contains(file.getStoreFileName()));
         }
 
         // 이미지 파일 삭제 처리
-        if (this.imageFiles != null && noteForm.getDeleteImages() != null) {
-            this.imageFiles.removeIf(imageFile -> noteForm.getDeleteImages().contains(imageFile.getStoreFileName()));
+        if (this.imageFiles != null && noteDto.getDeleteImages() != null) {
+            this.imageFiles.removeIf(imageFile -> noteDto.getDeleteImages().contains(imageFile.getStoreFileName()));
         }
     }
 
@@ -87,6 +86,10 @@ public class Note {
         this.createdAt = LocalDateTime.now();;
         this.category = category;
         this.viewCount = 0;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
 

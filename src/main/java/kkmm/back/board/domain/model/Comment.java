@@ -2,6 +2,7 @@ package kkmm.back.board.domain.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import kkmm.back.board.domain.dto.CommentDto;
 import kkmm.back.board.web.dto.CommentForm;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,7 +23,7 @@ public class Comment {
     @Column(name = "comment_id")
     private Long id;
 
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String contents;
 
     private LocalDateTime createdAt;
@@ -46,8 +47,8 @@ public class Comment {
     @OneToMany(mappedBy = "parent")
     private List<Comment> children = new ArrayList<>();
 
-    public Comment(CommentForm commentForm, Member member, Note note, Comment parentComment) {
-        this.contents = commentForm.getContents();
+    public Comment(CommentDto commentDto, Member member, Note note, Comment parentComment) {
+        this.contents = commentDto.getContents();
         this.createdAt = LocalDateTime.now();
         this.note = note;
         this.member = member;

@@ -1,5 +1,6 @@
 package kkmm.back.board.domain.Service;
 
+import kkmm.back.board.domain.dto.SignupDto;
 import kkmm.back.board.domain.model.Comment;
 import kkmm.back.board.domain.model.Member;
 import kkmm.back.board.domain.model.Note;
@@ -36,10 +37,10 @@ public class MemberService {
     private final MessageSource messageSource;
 
     @Transactional
-    public Long join(String name, String email, String rawPassword) {
+    public Long join(SignupDto signupDto) {
 
-        String encodedPassword = passwordEncoder.encode(rawPassword);
-        Member member = new Member(name, email, encodedPassword);
+        String encodedPassword = passwordEncoder.encode(signupDto.getPassword());
+        Member member = new Member(signupDto.getName(), signupDto.getEmail(), encodedPassword);
 
         validateDuplicateMember(member);
         memberRepository.save(member);
@@ -89,19 +90,19 @@ public class MemberService {
         return commentRepository.findByMemberId(memberId, pageable);
     }
 
-    private void validateDuplicateMember(Member member) {
-        Locale locale = LocaleContextHolder.getLocale();
-
-        if (memberRepository.existsByEmail(member.getEmail())) {
-            throw new IllegalStateException(messageSource.getMessage("login.error.duplicateEmail", null, locale));
-        }
-    }
-
     public int countNotes(Long memberId) {
         return noteRepository.countByMemberId(memberId);
     }
 
     public int countComments(Long memberId) {
         return commentRepository.countByMemberId(memberId);
+    }
+
+    private void validateDuplicateMember(Member member) {
+        Locale locale = LocaleContextHolder.getLocale();
+
+        if (memberRepository.existsByEmail(member.getEmail())) {
+            throw new IllegalStateException(messageSource.getMessage("login.error.duplicateEmail", null, locale));
+        }
     }
 }
