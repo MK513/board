@@ -61,11 +61,11 @@ public class Note {
     }
 
     public void updateContent(NoteDto noteDto, List<UploadFile> uploadFiles, List<UploadFile> uploadImageFiles) {
-        this.title = noteDto.getTitle();;
+        this.title = noteDto.getTitle();
         this.content = noteDto.getContents();
 
-        if (this.files != null) this.files.addAll(uploadFiles);
-        if (this.imageFiles != null) this.imageFiles.addAll(uploadImageFiles);
+        if (this.files != null ) this.files.addAll(uploadFiles);
+        if (this.imageFiles != null ) this.imageFiles.addAll(uploadImageFiles);
 
         // 일반 파일 삭제 처리
         if (this.files != null && noteDto.getDeleteFiles() != null) {

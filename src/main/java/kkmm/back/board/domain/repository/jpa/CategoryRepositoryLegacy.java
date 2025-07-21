@@ -9,10 +9,10 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class CategoryRepositoryRegacy {
+public class CategoryRepositoryLegacy {
 
     private final EntityManager em;
-    private final NoteRepositoryRegacy noteRepository;
+    private final NoteRepositoryLegacy noteRepository;
 
     public void save(Category category) {
         em.persist(category);

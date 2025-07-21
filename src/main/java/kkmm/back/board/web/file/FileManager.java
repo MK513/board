@@ -36,9 +36,10 @@ public class FileManager {
     }
 
     public List<UploadFile> storeFiles(List<MultipartFile> files)  {
-        if (files == null || files.isEmpty()) { return null;}
-
         List<UploadFile> storeFileResult = new ArrayList<>();
+
+        if (files == null || files.isEmpty()) { return storeFileResult;}
+
         for (MultipartFile file : files) {
             if (!file.isEmpty()) {
                 storeFileResult.add(storeFile(file));

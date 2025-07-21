@@ -25,7 +25,7 @@ public class CommentController {
                                 @Login Member member) {
 
         log.info("createComment={}", commentForm);
-        commentService.save(new CommentDto(commentForm), member);
+        commentService.save(new CommentDto(commentForm), member, noteId);
 
         return "redirect:/note/view/" + noteId;
     }

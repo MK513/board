@@ -11,7 +11,7 @@ import java.util.List;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class CommentRepositoryRegacy {
+public class CommentRepositoryLegacy {
 
     private final EntityManager em;
 
