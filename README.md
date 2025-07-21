@@ -9,10 +9,10 @@ Spring 생태계 전반(JPA, 인증·인가, 테스트, 배포)에 대한 경험
 ## 2. 기술 스택
 |  Layer  |  사용 기술 |
 |---------|-----------|
-| **Language** | Java 17 | 
+| **Language** | Java 21 | 
 | **Backend**  | Spring Boot 3.x, Spring MVC, Spring Security |
 | **DB** | MySQL 8.x <br> (Test: H2 in‑memory) | 
-| **ORM** | Spring Data JPA, Hibernate | 
+| **ORM** | Spring Data JPA, Hibernate, QueryDsl | 
 | **View** | Thymeleaf 3, Bootstrap 5 | 
 | **Test** | JUnit 5, Spring Boot Test, Mockito | 
 | **Build / CI** | Gradle (Kotlin DSL) or Maven <br> GitHub Actions | 
@@ -26,7 +26,7 @@ Spring 생태계 전반(JPA, 인증·인가, 테스트, 배포)에 대한 경험
   - 첨부파일 업로드 
 - **회원**
   - 회원가입 / 로그인 (Spring Security & BCrypt)
-  - 정보 관리 페이
+  - 정보 관리 페이지
   - 권한에 따른 메뉴/버튼 노출
 - **공통**
   - 전역 Exception 처리(ControllerAdvice)
