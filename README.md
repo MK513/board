@@ -63,3 +63,5 @@ cp .env.example .env   # DB, JWT 시크릿 등 채워넣기
 ./gradlew clean build
 java -jar build/libs/board-0.0.1-SNAPSHOT.jar
 
+```
+
