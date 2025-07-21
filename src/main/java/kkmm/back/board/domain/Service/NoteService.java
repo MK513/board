@@ -76,10 +76,12 @@ public class NoteService {
     }
 
     public Long countTotalPages() {
-        return (noteRepository.count() / 10) + 1;
+        long count = noteRepository.count();
+        return (count - 1) / 10 + 1;
     }
 
     public Long countSearchedPages(String keyword, String searchType) {
-        return (noteQueryRepository.countSearchedNotes(searchType, keyword) / 10) + 1;
+        long count = noteQueryRepository.countSearchedNotes(searchType, keyword);
+        return (count - 1) / 10 + 1;
     }
 }
