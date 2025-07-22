@@ -32,6 +32,9 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    /**
+     * 회원가입
+     */
     @GetMapping("/signup")
     public String signupForm(Model model) {
         model.addAttribute("member", new SignupForm());
@@ -51,6 +54,10 @@ public class MemberController {
 
         return "redirect:/board/list";
     }
+
+    /**
+     * 로그인
+     */
 
     @GetMapping("/login")
     public String loginForm(Model model) {
@@ -82,16 +89,22 @@ public class MemberController {
         return "redirect:" + redirectURL;
     }
 
+    /**
+     * 로그아웃
+     */
+
     @PostMapping("/logout")
     public String logout(HttpSession session) {
 
         if (session != null) {
             session.invalidate();
         }
-
         return "redirect:/board/list";
     }
 
+    /**
+     * 개인 페이지
+     */
     @GetMapping("/manage")
     public String memberManageForm(@Login Member loginMember,
                                    @RequestParam(required = false, defaultValue = "1", value = "notePage") int notePage,

@@ -47,6 +47,9 @@ public class NoteController {
         return request.getRequestURI();
     }
 
+    /**
+     * 게시글 작성
+     */
     @GetMapping("/write")
     public String createForm(Model model) {
         List<Category> categories = categoryService.findAll();
@@ -75,6 +78,10 @@ public class NoteController {
         return "redirect:/note/view/{id}";
     }
 
+    /**
+     * 게시글 뷰
+     */
+
     @GetMapping("/view/{id}")
     public String viewForm(@PathVariable Long id,
                            @Login Member member,
@@ -97,6 +104,10 @@ public class NoteController {
 
         return "form/viewNoteForm";
     }
+
+    /**
+     * 게시글 수정
+     */
 
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable Long id, Model model) {
@@ -122,6 +133,10 @@ public class NoteController {
         return "redirect:/note/view/" + id;
     }
 
+    /**
+     * 게시글 삭제
+     */
+
     @DeleteMapping("/delete/{id}")
     public String deleteNote(@PathVariable Long id) {
 
@@ -129,6 +144,10 @@ public class NoteController {
 
         return "redirect:/board/list";
     }
+
+    /**
+     * 게시글에 파일 올리기
+     */
 
     @ResponseBody
     @GetMapping("/images/{filename}")

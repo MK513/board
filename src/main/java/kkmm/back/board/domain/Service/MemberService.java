@@ -70,7 +70,7 @@ public class MemberService {
 
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(
-                        messageSource.getMessage("login.error.notExist", null, locale)));
+                        messageSource.getMessage("login.error.notFound", null, locale)));
 
         if (!passwordEncoder.matches(rawPassword, member.getPassword())) {
             throw new BadCredentialsException(

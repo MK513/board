@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CategoryForm {
 
-    @NotDefaultCategory
     public Long id;
 
+    @NotDefaultCategory
     @Size(max = 10)
     public String name;
 }

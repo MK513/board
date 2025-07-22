@@ -48,8 +48,8 @@ class CommentServiceTest extends IntegrationTestSupport {
         parentDto.setNoteId(note.getId());
         parentDto.setContents("contents");
 
-        Long parentdId = commentService.save(parentDto, member);
-        Comment parentComment = commentService.findById(parentdId);
+        Long parentId = commentService.save(parentDto, member);
+        Comment parentComment = commentService.findById(parentId);
 
         //when
         CommentDto childDto = new CommentDto();

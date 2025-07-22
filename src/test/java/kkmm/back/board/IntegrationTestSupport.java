@@ -1,6 +1,7 @@
 package kkmm.back.board;
 
 import kkmm.back.board.domain.Service.*;
+import kkmm.back.board.domain.dto.CategoryDto;
 import kkmm.back.board.domain.dto.CommentDto;
 import kkmm.back.board.domain.dto.SignupDto;
 import kkmm.back.board.domain.model.*;
@@ -34,11 +35,11 @@ public abstract class IntegrationTestSupport {
     }
 
     protected Category createCategory(String name) {
-        Long id = categoryService.save(new Category(name));
+        Long id = categoryService.save(new CategoryDto(name));
         return categoryService.findById(id);
     }
 
-    protected void saveSampleNotes(Category category, Member member) {
+    protected List<Note> saveSampleNotes(Category category, Member member) {
         LocalDateTime baseTime = LocalDateTime.now().minusDays(10);
         List<Note> notes = List.of(
                 new Note(member, "1", "1", category),
@@ -56,6 +57,7 @@ public abstract class IntegrationTestSupport {
             notes.get(i).setCreatedAt(baseTime.plusDays(i));
         }
         noteRepository.saveAll(notes);
+        return notes;
     }
 
     protected void saveSampleComments(Member member, List<Note> notes) throws InterruptedException {

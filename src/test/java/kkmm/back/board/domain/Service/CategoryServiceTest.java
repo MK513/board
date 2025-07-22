@@ -1,9 +1,12 @@
 package kkmm.back.board.domain.Service;
 
+import jakarta.persistence.EntityManager;
+import kkmm.back.board.domain.dto.CategoryDto;
 import kkmm.back.board.domain.model.Category;
 import kkmm.back.board.IntegrationTestSupport;
 import kkmm.back.board.domain.Service.CategoryService;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -16,20 +19,22 @@ class CategoryServiceTest extends IntegrationTestSupport {
     @Test
     public void 카테고리_저장() throws Exception {
         //given
-        Category category = new Category("dummy");
+        CategoryDto category = new CategoryDto("dummy");
 
         //when
         Long savedId = categoryService.save(category);
 
         //then
-        assertThat(savedId).isEqualTo(category.getId());
+        Category findCategory = categoryService.findById(savedId);
+
+        assertThat(findCategory.getName()).isEqualTo(category.getName());
     }
 
     @Test
     public void 카테고리_저장_실패() throws Exception {
         //given
-        Category category = new Category("dummy");
-        Category dupCategory = new Category("dummy");
+        CategoryDto category = new CategoryDto("dummy");
+        CategoryDto dupCategory = new CategoryDto("dummy");
 
         //when
         categoryService.save(category);
@@ -42,38 +47,37 @@ class CategoryServiceTest extends IntegrationTestSupport {
     @Test
     public void 카테고리_제거() throws Exception {
         //given
-        Category category = new Category("dummy");
-        categoryService.save(category);
+        CategoryDto category = new CategoryDto("dummy");
+        Long savedId = categoryService.save(category);
 
         //when
-        categoryService.remove(category.getId());
+        categoryService.remove(savedId);
 
         //then
-        assertThatThrownBy(() -> categoryService.findById(category.getId()))
-                .isInstanceOf(NoSuchElementException.class);
+        assertThatThrownBy(() -> categoryService.findById(savedId))
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     public void 카테고리_이름_검색() throws Exception {
         //given
-        Category category = new Category("dummy");
+        CategoryDto category = new CategoryDto("dummy");
         categoryService.save(category);
 
         //when
         Category findCategory = categoryService.findByName("dummy");
 
         //then
-        assertThat(findCategory).isEqualTo(category);
-        assertThatThrownBy(() -> categoryService.findByName("dummy2"))
-                .isInstanceOf(NoSuchElementException.class);
+        assertThat(findCategory.getName()).isEqualTo(category.getName());
+        assertThat(categoryService.findByName("dummy2")).isNull();
     }
 
     @Test
     public void 카테고리_모두_찾기() throws Exception {
         //given
-        Category category1 = new Category("dummy1");
-        Category category2 = new Category("dummy2");
-        Category category3 = new Category("dummy3");
+        CategoryDto category1 = new CategoryDto("dummy1");
+        CategoryDto category2 = new CategoryDto("dummy2");
+        CategoryDto category3 = new CategoryDto("dummy3");
 
         //when
         categoryService.save(category1);
@@ -83,8 +87,8 @@ class CategoryServiceTest extends IntegrationTestSupport {
         //then
         List<Category> categories = categoryService.findAll();
         assertThat(categories.size()).isEqualTo(3);
-        assertThat(categories.get(0)).isEqualTo(category1);
-        assertThat(categories.get(1)).isEqualTo(category2);
-        assertThat(categories.get(2)).isEqualTo(category3);
+        assertThat(categories.get(0).getName()).isEqualTo(category1.getName());
+        assertThat(categories.get(1).getName()).isEqualTo(category2.getName());
+        assertThat(categories.get(2).getName()).isEqualTo(category3.getName());
     }
 }

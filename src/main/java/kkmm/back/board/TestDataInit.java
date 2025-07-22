@@ -3,6 +3,7 @@ package kkmm.back.board;
 import kkmm.back.board.domain.Service.CategoryService;
 import kkmm.back.board.domain.Service.MemberService;
 import kkmm.back.board.domain.Service.NoteService;
+import kkmm.back.board.domain.dto.CategoryDto;
 import kkmm.back.board.domain.dto.NoteDto;
 import kkmm.back.board.domain.dto.SignupDto;
 import kkmm.back.board.domain.model.Category;
@@ -38,7 +39,7 @@ public class TestDataInit {
         Member alice = memberService.findById(alice1);
         Member bob = memberService.findById(bob1);
 
-        categoryService.save(new Category("자유게시판"));
+        categoryService.save(new CategoryDto("자유게시판"));
         Category category = categoryService.findById(1L);
 
         // 2) 샘플 제목과 내용 목록

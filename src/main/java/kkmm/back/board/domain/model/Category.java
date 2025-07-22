@@ -1,6 +1,7 @@
 package kkmm.back.board.domain.model;
 
 import jakarta.persistence.*;
+import kkmm.back.board.domain.dto.CategoryDto;
 import kkmm.back.board.web.dto.CategoryForm;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -31,8 +32,8 @@ public class Category {
         this.count = 0;
     }
 
-    public Category(CategoryForm categoryForm) {
-        this.name = categoryForm.getName();
+    public Category(CategoryDto categoryDto) {
+        this.name = categoryDto.getName();
         this.count = 0;
     }
 

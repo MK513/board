@@ -22,8 +22,8 @@ public class CommentService {
     private final NoteRepository noteRepository;
 
     @Transactional
-    public Long save(CommentDto commentDto, Member member, Long noteId) {
-        Note note = noteRepository.findById(noteId).orElseThrow();
+    public Long save(CommentDto commentDto, Member member) {
+        Note note = noteRepository.findById(commentDto.getNoteId()).orElseThrow();
         Comment parentComment = null;
         if (commentDto.getParentId() != null) {
             parentComment = commentRepository.findById(commentDto.getParentId()).orElse(null);

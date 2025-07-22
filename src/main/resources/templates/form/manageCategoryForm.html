@@ -52,6 +52,7 @@
             method="post"
             class="space-y-6 py-6"
     >
+      <input type="hidden" name="_method" value="delete"/>
       <div>
 
         <label for="id" class="block mb-2 font-medium" th:text="#{label.category.remove}">카테고리 제거</label>
@@ -69,7 +70,7 @@
           </option>
         </select>
 
-        <div th:errorclass="field-error" th:errors="*{id}">필드 에러</div>
+        <div th:errorclass="field-error" th:errors="*{name}">필드 에러</div>
 
         <div class="flex justify-end space-x-3 pt-4 ">
           <button

@@ -3,6 +3,7 @@ package kkmm.back.board.web.controller;
 import kkmm.back.board.ControllerTestSupport;
 import kkmm.back.board.domain.model.Category;
 import kkmm.back.board.domain.model.Member;
+import kkmm.back.board.web.SessionConst;
 import org.junit.jupiter.api.Test;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -29,6 +30,7 @@ class BoardControllerTest extends ControllerTestSupport {
         saveSampleNotes(category, member);
 
         mockMvc.perform(get("/board/search")
+                        .sessionAttr(SessionConst.LOGIN_MEMBER, member)
                         .param("searchType", "title")
                         .param("keyword", "1")
                         .param("page", "1"))
