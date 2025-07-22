@@ -1,44 +1,24 @@
 package kkmm.back.board.domain.Service;
 
-import jakarta.transaction.Transactional;
+import kkmm.back.board.IntegrationTestSupport;
 import kkmm.back.board.domain.dto.CommentDto;
 import kkmm.back.board.domain.model.Category;
 import kkmm.back.board.domain.model.Comment;
 import kkmm.back.board.domain.model.Member;
 import kkmm.back.board.domain.model.Note;
-import kkmm.back.board.domain.repository.CategoryRepository;
-import kkmm.back.board.domain.repository.MemberRepository;
-import kkmm.back.board.domain.repository.NoteRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@Transactional
-@SpringBootTest
-@Slf4j
-class CommentServiceTest {
+class CommentServiceTest extends IntegrationTestSupport {
 
-    @Autowired
-    CommentService commentService;
-
-    @Autowired
-    NoteRepository noteRepository;
-
-    @Autowired
-    MemberRepository memberRepository;
-
-    @Autowired
-    CategoryRepository categoryRepository;
 
     @Test
     public void 댓글_저장() throws Exception {
         //given
-        Member member = memberRepository.save(new Member("a", "a", "a"));
-        Category category = categoryRepository.save(new Category("dummy"));
+        Member member = joinMember("a", "a", "a");
+        Category category = createCategory("dummy");
         Note note = noteRepository.save(new Note(member, "a", "a", category));
 
         CommentDto commentDto = new CommentDto();
@@ -60,8 +40,8 @@ class CommentServiceTest {
     @Test
     public void 대댓글_저장() throws Exception {
         //given
-        Member member = memberRepository.save(new Member("a", "a", "a"));
-        Category category = categoryRepository.save(new Category("dummy"));
+        Member member = joinMember("a", "a", "a");
+        Category category = createCategory("dummy");
         Note note = noteRepository.save(new Note(member, "a", "a", category));
 
         CommentDto parentDto = new CommentDto();
@@ -88,8 +68,8 @@ class CommentServiceTest {
     @Test
     public void 댓글_수정() throws Exception {
         //given
-        Member member = memberRepository.save(new Member("a", "a", "a"));
-        Category category = categoryRepository.save(new Category("dummy"));
+        Member member = joinMember("a", "a", "a");
+        Category category = createCategory("dummy");
         Note note = noteRepository.save(new Note(member, "a", "a", category));
 
         CommentDto commentDto = new CommentDto();

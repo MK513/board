@@ -1,38 +1,25 @@
 package kkmm.back.board.domain.repository;
 
+import kkmm.back.board.IntegrationTestSupport;
 import kkmm.back.board.domain.model.Category;
 import kkmm.back.board.domain.model.Member;
 import kkmm.back.board.domain.model.Note;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
 @Slf4j
-@Transactional
-class NoteQueryRepositoryTest {
+class NoteQueryRepositoryTest extends IntegrationTestSupport {
 
-    @Autowired
-    NoteQueryRepository noteQueryRepository;
-
-    @Autowired
-    NoteRepository noteRepository;
-    @Autowired
-    CategoryRepository categoryRepository;
-    @Autowired
-    MemberRepository memberRepository;
 
     @Test
     public void 게시글_범위_찾기() throws Exception {
         //given
-        save_sample_notes();
+        saveSampleNotes();
 
         //when
         List<Note> findNotes = noteQueryRepository.findNoteRange(4, 4);
@@ -48,7 +35,7 @@ class NoteQueryRepositoryTest {
     @Test
     public void 게시글_검색_범위_찾기() throws Exception {
         //given
-        save_sample_notes();
+        saveSampleNotes();
 
         //when
         List<Note> findNotes1 = noteQueryRepository.searchNotesRange("title", "2", 0, 10);
@@ -72,7 +59,7 @@ class NoteQueryRepositoryTest {
     @Test
     public void 검색된_게시글수_찾기() throws Exception {
         //given
-        save_sample_notes();
+        saveSampleNotes();
 
         //when
         Long s1 = noteQueryRepository.countSearchedNotes("title", "3" );
@@ -83,12 +70,9 @@ class NoteQueryRepositoryTest {
         assertThat(s2).isEqualTo(4L);
     }
 
-    public void save_sample_notes() {
-        Category category = new Category("1");
-        categoryRepository.save(category);
-
-        Member member1 = new Member("1", "1", "1");
-        memberRepository.save(member1);
+    private void saveSampleNotes() {
+        Category category = createCategory("1");
+        Member member1 = joinMember("1", "1", "1");
 
         LocalDateTime baseTime = LocalDateTime.now();
 
