@@ -1,22 +1,19 @@
 package kkmm.back.board.domain.Service;
 
+import kkmm.back.board.IntegrationTestSupport;
 import kkmm.back.board.domain.dto.CommentDto;
 import kkmm.back.board.domain.dto.SignupDto;
 import kkmm.back.board.domain.model.Category;
 import kkmm.back.board.domain.model.Comment;
 import kkmm.back.board.domain.model.Member;
 import kkmm.back.board.domain.model.Note;
-import kkmm.back.board.domain.repository.CommentRepository;
-import kkmm.back.board.domain.repository.NoteRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,18 +23,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@SpringBootTest
-@Transactional
 @Slf4j
-class MemberServiceTest {
+class MemberServiceTest extends IntegrationTestSupport {
 
-    @Autowired NoteRepository noteRepository;
-    @Autowired MemberService memberService;
     @Autowired PasswordEncoder passwordEncoder;
-    @Autowired NoteService noteService;
-    @Autowired CommentService commentService;
-    @Autowired CommentRepository commentRepository;
-    @Autowired CategoryService categoryService;
 
     @Test
     public void 회원가입() throws Exception {
@@ -113,8 +102,8 @@ class MemberServiceTest {
     public void 유저별_게시글_검색() throws Exception {
         //given
         Member member = joinMember("a", "1", "2");
-        Category category = makeCategory();
-        save_sample_notes(category, member);
+        Category category = createCategory("default");
+        saveSampleNotes(category, member);
 
         //when
         Page<Note> notes = memberService.findNotes(member.getId(), 1, 10);
@@ -132,12 +121,12 @@ class MemberServiceTest {
     public void 유저별_댓글_검색() throws Exception {
         //given
         Member member = joinMember("a", "1", "2");
-        Category category = makeCategory();
+        Category category = createCategory("default");
 
-        save_sample_notes(category, member);
+        saveSampleNotes(category, member);
         List<Note> notes = memberService.findNotes(member.getId(), 1, 10).getContent();
 
-        save_sample_comments(member, notes);
+        saveSampleComments(member, notes);
 
         //when
         Page<Comment> comments = memberService.findComments(member.getId(), 1, 10);
@@ -152,49 +141,4 @@ class MemberServiceTest {
         });
     }
 
-    private Category makeCategory() {
-        Long categoryId = categoryService.save(new Category("default"));
-        return categoryService.findById(categoryId);
-    }
-
-    private Member joinMember(String email, String password, String name) throws Exception {
-        SignupDto signupDto = new SignupDto(email, password, name);
-        Long joinId = memberService.join(signupDto);
-        return memberService.findById(joinId);
-    }
-
-    private void save_sample_comments(Member member, List<Note> notes) throws InterruptedException {
-        LocalDateTime baseTime = LocalDateTime.now();
-
-        for (int i = notes.size() - 1; i >= 0 ; i--) {
-            CommentDto commentDto = new CommentDto();
-            commentDto.setNoteId(notes.get(i).getId());
-            commentService.save(commentDto, member);
-
-            Thread.sleep(10);
-        }
-    }
-
-    public void save_sample_notes(Category category, Member member) {
-        LocalDateTime baseTime = LocalDateTime.now().minusDays(10);
-
-        List<Note> notes = List.of(
-                new Note(member, "1", "1", category),
-                new Note(member, "2", "2", category),
-                new Note(member, "3", "3", category),
-                new Note(member, "4", "4", category),
-                new Note(member, "5", "5", category),
-                new Note(member, "6", "6", category),
-                new Note(member, "7", "7", category),
-                new Note(member, "8", "8", category),
-                new Note(member, "9", "9", category),
-                new Note(member, "10", "10", category)
-        );
-
-        for (int i = 0; i < 10; i++) {
-            notes.get(i).setCreatedAt(baseTime.plusDays(i));
-        }
-
-        noteRepository.saveAll(notes);
-    }
 }

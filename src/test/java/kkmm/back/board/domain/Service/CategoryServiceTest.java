@@ -1,11 +1,9 @@
 package kkmm.back.board.domain.Service;
 
-import jakarta.transaction.Transactional;
 import kkmm.back.board.domain.model.Category;
-import lombok.extern.slf4j.Slf4j;
+import kkmm.back.board.IntegrationTestSupport;
+import kkmm.back.board.domain.Service.CategoryService;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -13,13 +11,7 @@ import java.util.NoSuchElementException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@SpringBootTest
-@Slf4j
-@Transactional
-class CategoryServiceTest {
-
-    @Autowired
-    CategoryService categoryService;
+class CategoryServiceTest extends IntegrationTestSupport {
 
     @Test
     public void 카테고리_저장() throws Exception {
