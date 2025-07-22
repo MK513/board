@@ -40,4 +40,6 @@ public class Category {
     public void increaseCount() {
         count++;
     }
+
+    public void decreaseCount() { count--; }
 }

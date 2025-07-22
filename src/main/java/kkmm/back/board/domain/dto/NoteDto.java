@@ -54,5 +54,14 @@ public class NoteDto {
         this.categoryName = noteForm.getCategoryName();
         this.viewCount = 0;
         this.commentCount = 0;
+
+        this.attachFiles = noteForm.getAttachFiles();
+        this.attachImages = noteForm.getAttachImages();
+
+        this.deleteFiles = noteForm.getDeleteFiles();
+        this.deleteImages = noteForm.getDeleteImages();
+
+        this.files = noteForm.getFiles();
+        this.images = noteForm.getImages();
     }
 }

@@ -20,7 +20,7 @@ class MemberControllerTest extends ControllerTestSupport {
     void 로그인_폼() throws Exception {
         mockMvc.perform(get("/member/login"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("member/loginForm"));
+                .andExpect(view().name("form/loginForm"));
     }
 
     @Test
@@ -40,7 +40,7 @@ class MemberControllerTest extends ControllerTestSupport {
                         .param("password", "pw")
                         .param("name", "name"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("member/signupForm"))
+                .andExpect(view().name("form/signupForm"))
                 .andExpect(model().attributeHasFieldErrors("member", "password"));
     }
 

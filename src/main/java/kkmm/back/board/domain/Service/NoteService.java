@@ -59,6 +59,8 @@ public class NoteService {
 
     @Transactional
     public void deleteNote(Long id) {
+        Category category = noteRepository.findById(id).orElseThrow().getCategory();
+        category.decreaseCount(); // 카테고리 사용 수 감소
         noteRepository.deleteById(id);
     }
 

@@ -63,8 +63,7 @@ public class NoteController {
     @PostMapping("/write")
     public String saveNote(@Validated @ModelAttribute("note") NoteForm noteForm,
                            @Login Member member,
-                           RedirectAttributes redirectAttributes,
-                           Model model) throws IOException {
+                           RedirectAttributes redirectAttributes) {
 
         log.info("noteForm={}", noteForm);
         log.info("file={}", noteForm.getFiles());
@@ -81,7 +80,6 @@ public class NoteController {
     /**
      * 게시글 뷰
      */
-
     @GetMapping("/view/{id}")
     public String viewForm(@PathVariable Long id,
                            @Login Member member,
@@ -108,7 +106,6 @@ public class NoteController {
     /**
      * 게시글 수정
      */
-
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable Long id, Model model) {
         List<Category> categories = categoryService.findAll();
@@ -122,8 +119,7 @@ public class NoteController {
 
     @PutMapping("/edit/{id}")
     public String editNote(@Validated @ModelAttribute("note") NoteForm noteForm,
-                           @PathVariable Long id,
-                           Model model) {
+                           @PathVariable Long id) {
 
         log.info("noteForm.getDeleteFiles()={}", noteForm.getDeleteFiles());
         log.info("noteForm.getDeleteImages()={}", noteForm.getDeleteImages());
@@ -136,7 +132,6 @@ public class NoteController {
     /**
      * 게시글 삭제
      */
-
     @DeleteMapping("/delete/{id}")
     public String deleteNote(@PathVariable Long id) {
 
@@ -148,7 +143,6 @@ public class NoteController {
     /**
      * 게시글에 파일 올리기
      */
-
     @ResponseBody
     @GetMapping("/images/{filename}")
     public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
@@ -157,8 +151,7 @@ public class NoteController {
 
     @GetMapping("/download")
     public ResponseEntity<Resource> download(@RequestParam("sn") String storeFileName,
-                                                @RequestParam("un") String uploadFileName,
-                                                Model model) throws MalformedURLException {
+                                                @RequestParam("un") String uploadFileName) throws MalformedURLException {
 
         UrlResource resource = new UrlResource("file:" + fileDir + storeFileName);
         String encodedUploadFileName = UriUtils.encode(uploadFileName, StandardCharsets.UTF_8);

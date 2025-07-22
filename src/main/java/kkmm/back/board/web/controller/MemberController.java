@@ -4,9 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import kkmm.back.board.domain.Service.MemberService;
 import kkmm.back.board.domain.dto.SignupDto;
-import kkmm.back.board.domain.model.Comment;
 import kkmm.back.board.domain.model.Member;
-import kkmm.back.board.domain.model.Note;
 import kkmm.back.board.web.SessionConst;
 import kkmm.back.board.web.argumentResolver.Login;
 import kkmm.back.board.web.dto.CommentForm;
@@ -15,7 +13,6 @@ import kkmm.back.board.web.dto.NoteForm;
 import kkmm.back.board.web.dto.SignupForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,14 +35,14 @@ public class MemberController {
     @GetMapping("/signup")
     public String signupForm(Model model) {
         model.addAttribute("member", new SignupForm());
-        return "member/signupForm";
+        return "form/signupForm";
     }
 
     @PostMapping("/signup")
     public String signup(@Validated @ModelAttribute("member") SignupForm signupForm, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return "member/signupForm";
+            return "form/signupForm";
         }
 
         log.info("signup");
@@ -62,7 +59,7 @@ public class MemberController {
     @GetMapping("/login")
     public String loginForm(Model model) {
         model.addAttribute("login", new LoginForm());
-        return "member/loginForm";
+        return "form/loginForm";
     }
 
     @PostMapping("/login")
@@ -70,14 +67,14 @@ public class MemberController {
                         @RequestParam(defaultValue = "/") String redirectURL, HttpServletRequest request) {
 
         if (bindingResult.hasErrors()) {
-            return "member/loginForm";
+            return "form/loginForm";
         }
 
         Member loginMember = memberService.login(loginForm.getEmail(), loginForm.getPassword());
 
         if (loginMember == null) {
             bindingResult.reject("loginFail", "아이디 또는 비밀번호가 일치하지 않습니다.");
-            return "member/loginForm";
+            return "form/loginForm";
         }
 
         HttpSession session = request.getSession();
