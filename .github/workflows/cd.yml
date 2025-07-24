@@ -1,0 +1,48 @@
+# .github/workflows/cd.yml
+name: CD Deploy to Server
+
+# ① docker-publish 워크플로가 main 브랜치에서 성공적으로 끝났을 때만 트리거
+on:
+  workflow_run:
+    workflows: ["docker-publish"]   # ← docker 이미지를 푸시하는 기존 workflow 이름
+    types: [ completed ]
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    # docker-publish 성공일 때만 실행
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      # ② (선택) 실행 중인 다른 워크플로 로그 확인용
+      - name: Checkout (for logs only)
+        uses: actions/checkout@v4
+
+      # ③ SSH 접속해 컨테이너 교체
+      - name: SSH into server and deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host:     ${{ secrets.SSH_HOST }}     # 예: 13.124.xxx.xxx
+          username: ${{ secrets.SSH_USER }}     # 예: ec2-user
+          key:      ${{ secrets.SSH_KEY }}      # 개인키(PKCS8) 내용
+          script: |
+            set -e
+
+            echo "🔐 Docker Hub 로그인"
+            docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+
+            echo "📥 최신 이미지 Pull"
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/spring-thyme-app:latest
+
+            echo "🛑 기존 컨테이너 중지 및 삭제(없어도 무시)"
+            docker stop spring-app || true
+            docker rm   spring-app || true
+
+            echo "🚀 새 컨테이너 기동"
+            docker run -d --name spring-app \
+              -p 8080:8080 \
+              -e SPRING_PROFILES_ACTIVE=prod \
+              -e FILE_DIR=/data/files \
+              -v /opt/spring/files:/data/files \
+              ${{ secrets.DOCKERHUB_USERNAME }}/spring-thyme-app:latest
