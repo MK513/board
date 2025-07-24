@@ -1,11 +1,11 @@
 # 1) 빌드 스테이지
-FROM gradle:8.7-jdk17 AS build
+FROM gradle:8.7-jdk21 AS build
 WORKDIR /app
 COPY . .
 RUN gradle clean build -x test
 
 # 2) 런타임 스테이지
-FROM eclipse-temurin:17-jre
+FROM eclipse-temurin:21-jre
 WORKDIR /app
 
 # 프로파일/포트 환경 변수
