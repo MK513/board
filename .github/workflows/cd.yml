@@ -1,5 +1,6 @@
 name: CD Deploy to Server
 
+
 on:
   workflow_dispatch:   # 수동 배포용
   workflow_run:        # docker-publish 성공 뒤 자동 배포
@@ -14,32 +15,28 @@ jobs:
       (github.event.workflow_run.conclusion == 'success')
     runs-on: self-hosted          # ← 로컬 PC 러너라면 그대로
 
+    # .github/workflows/cd.yml (부분)
     steps:
-      - name: Checkout (logs only)
+      - name: Checkout
         uses: actions/checkout@v4
-
-      # --- ① GHCR 로그인 ---
+    
+      # GHCR 로그인 (★ 수정)
       - name: Login to GHCR
-        run: echo "${{ secrets.GHCR_TOKEN }}" |
-              docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
-
-      # --- ② 이미지 Pull & 재기동 ---
-      - name: Pull latest image and restart
+        uses: docker/login-action@v3        # ← 공식 액션 사용
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_TOKEN }}
+    
+      - name: Pull & restart container
         run: |
-          TAG=${{ github.event.inputs.image_tag || 'latest' }}
-          IMAGE=ghcr.io/${{ secrets.GHCR_USERNAME }}/spring-thyme-app:$TAG
-
-          echo "Pull $IMAGE"
-          docker pull $IMAGE
-
-          echo "Stop / Remove old container (if any)"
+          IMAGE=ghcr.io/${{ secrets.GHCR_USERNAME }}/spring-thyme-app:latest
+          docker pull "$IMAGE"
           docker stop spring-app || true
           docker rm   spring-app || true
-
-          echo "Run new container"
           docker run -d --name spring-app -p 8080:8080 \
             -e SPRING_PROFILES_ACTIVE=prod \
-            $IMAGE
+            "$IMAGE"
             
     # runs-on: ubuntu-latest
 
