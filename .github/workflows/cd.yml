@@ -28,19 +28,27 @@ jobs:
           username: ${{ secrets.GHCR_USERNAME }}
           password: ${{ secrets.GHCR_TOKEN }}
     
-      - name: Pull & restart container
-        shell: pwsh
+      - name: Pull & restart (compose)
+        shell: powershell           # ← pwsh 대신 powershell
         run: |
+          # 변수 설정
           $Image = "ghcr.io/${{ secrets.GHCR_USERNAME }}/spring-thyme-app:latest"
-
-          docker login ghcr.io -u $env:GHCR_USERNAME -p $env:GHCR_TOKEN
-          docker pull $Image
-
-          docker stop  spring-app 2>$null
-          docker rm    spring-app 2>$null
-
+      
+          # GHCR 로그인
+          docker login ghcr.io -u "${{ secrets.GHCR_USERNAME }}" -p "${{ secrets.GHCR_TOKEN }}"
+      
+          # 최신 이미지 다운로드
+          docker compose pull
+      
+          # 기존 컨테이너 정지·삭제 (오류 무시)
+          docker compose stop app 2>$null
+          docker compose rm -f app 2>$null
+      
+          # 새 컨테이너 실행
           docker compose up -d app
-
+      
+          # 상태 출력
+          docker compose ps
             
     # runs-on: ubuntu-latest
 
