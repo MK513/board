@@ -4,7 +4,7 @@ name: CD Deploy to Server
 # ① docker-publish 워크플로가 main 브랜치에서 성공적으로 끝났을 때만 트리거
 on:
   workflow_run:
-    workflows: ["docker-publish"]   # ← docker 이미지를 푸시하는 기존 workflow 이름
+    workflows: ["CI Build and Push Docker"]   # ← docker 이미지를 푸시하는 기존 workflow 이름
     types: [ completed ]
     branches: [ "main" ]
 
