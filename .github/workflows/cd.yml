@@ -3,6 +3,13 @@ name: CD Deploy to Server
 
 # ① docker-publish 워크플로가 main 브랜치에서 성공적으로 끝났을 때만 트리거
 on:
+  workflow_dispatch:            # ← 수동 실행용
+    inputs:                     # (선택) 파라미터 예시
+      image_tag:
+        description: 'Docker image tag to deploy'
+        required: false
+        default: 'latest'
+
   workflow_run:
     workflows: ["CI Build and Push Docker"]   # ← docker 이미지를 푸시하는 기존 workflow 이름
     types: [ completed ]
