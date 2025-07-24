@@ -29,6 +29,7 @@ jobs:
           password: ${{ secrets.GHCR_TOKEN }}
     
       - name: Pull & restart container
+        shell: bash 
         run: |
           IMAGE=ghcr.io/${{ secrets.GHCR_USERNAME }}/spring-thyme-app:latest
           docker pull "$IMAGE"
