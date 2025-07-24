@@ -20,8 +20,8 @@ jobs:
 
       # --- ① GHCR 로그인 ---
       - name: Login to GHCR
-        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io \
-               -u ${{ secrets.GHCR_USERNAME }} --password-stdin
+        run: echo "${{ secrets.GHCR_TOKEN }}" |
+              docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
 
       # --- ② 이미지 Pull & 재기동 ---
       - name: Pull latest image and restart
