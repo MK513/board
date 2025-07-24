@@ -25,12 +25,12 @@ jobs:
     - name: Run tests and generate coverage
       run: ./gradlew test jacocoTestReport
 
-    - name: Upload JUnit Test Results
+    - name: Upload HTML Junit Test Report
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: junit-test-results
-        path: build/test-results/test/
+        name: junit-html-report
+        path: build/reports/tests/test/
 
     - name: Upload JaCoCo HTML Report
       if: always()
