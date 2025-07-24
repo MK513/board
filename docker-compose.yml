@@ -1,22 +1,32 @@
-version: "3.8"
+version: "3.9"
 services:
+  db:
+    image: mysql:8.4          
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: mydb               # 초기 DB
+      MYSQL_ROOT_PASSWORD: 0513        # 루트 PW
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks: [appnet]
+
   app:
-    build: .
+    image: ghcr.io/${GHCR_USERNAME}/spring-thyme-app:latest
+    container_name: spring-app
+    depends_on: [db]
     ports:
       - "8080:8080"
     environment:
-      SPRING_PROFILES_ACTIVE: docker
-      DB_HOST: db
-    depends_on:
-      - db
-  db:
-    image: mysql:8
-    environment:
-      MYSQL_DATABASE: mydb
-      MYSQL_ROOT_PASSWORD: root
-    ports:
-      - "3306:3306"
-    volumes:
-      - dbdata:/var/lib/mysql
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/mydb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 0513
+    restart: always
+    networks: [appnet]
+
 volumes:
   dbdata:
+
+networks:
+  appnet:
