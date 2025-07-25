@@ -24,7 +24,15 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-    
+
+      - name: Write .env file
+        run: | 
+            @"
+            DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            "@ | Out-File -Encoding ASCII .env
+        shell: powershell
+  
       - name: Pull & restart container
         run: |
           $ErrorActionPreference = "Stop"
@@ -40,7 +48,7 @@ jobs:
             Write-Output "spring-app 컨테이너가 존재하지 않아도 계속 진행합니다."
           }
           docker image prune -af
-      
+          
           docker compose up -d app
         shell: powershell
             
