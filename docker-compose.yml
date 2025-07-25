@@ -6,13 +6,13 @@ services:
     restart: always
     environment:
       MYSQL_DATABASE: mydb               # 초기 DB
-      MYSQL_ROOT_PASSWORD: 0513        # 루트 PW
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}        # 루트 PW
     volumes:
       - dbdata:/var/lib/mysql
     networks: [appnet]
 
   app:
-    image: ghcr.io/${GHCR_USERNAME}/spring-thyme-app:latest
+    image: docker.io/${DOCKERHUB_USERNAME}/spring-thyme-app:latest
     container_name: spring-app
     depends_on: [db]
     ports:
@@ -21,7 +21,7 @@ services:
       SPRING_PROFILES_ACTIVE: prod
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/mydb
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 0513
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD} 
     restart: always
     networks: [appnet]
 
