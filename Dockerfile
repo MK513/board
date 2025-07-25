@@ -13,6 +13,6 @@ ENV SPRING_PROFILES_ACTIVE=prod \
     TZ=Asia/Seoul
 
 # JAR 복사
-COPY build/libs/spring-thyme-app-0.0.1-SNAPSHOT.jar /app.jar
+COPY build/libs/board-0.0.1-SNAPSHOT.jar /app.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/app.jar"]
