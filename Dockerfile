@@ -1,18 +1,19 @@
-# 1) 빌드 스테이지
-FROM gradle:8.7-jdk21 AS build
+# ---------- 1) Build stage ----------
+FROM gradle:8.7-jdk21 AS builder
 WORKDIR /app
 COPY . .
-RUN gradle clean build -x test
+# 테스트 제외하고 빌드
+RUN ./gradlew bootJar -x test --no-daemon
 
-# 2) 런타임 스테이지
+# ---------- 2) Runtime stage ----------
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 
-# 프로파일/포트 환경 변수
 ENV SPRING_PROFILES_ACTIVE=prod \
     TZ=Asia/Seoul
 
-# JAR 복사
-COPY build/libs/*-SNAPSHOT.jar /app.jar
+# 실행 가능한 jar만 복사
+COPY --from=builder /app/build/libs/*-SNAPSHOT.jar /app.jar
+
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/app.jar"]
