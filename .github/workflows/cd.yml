@@ -6,7 +6,6 @@ on:
   workflow_run:        # docker-publish 성공 뒤 자동 배포
     workflows: [ "CI Build and Push Docker" ]
     types: [ completed ]
-    branches: [ "main" ]
 
 jobs:
   deploy:
