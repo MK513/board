@@ -28,19 +28,18 @@ jobs:
           password: ${{ secrets.GHCR_TOKEN }}
     
       - name: Pull & restart container
-        shell: bash                  # ← 추가
         run: |
-          set -e
-          IMAGE=ghcr.io/${{ secrets.GHCR_USERNAME }}/spring-thyme-app:latest
-          docker pull "$IMAGE"
+          $ErrorActionPreference = "Stop"
+          $image = "ghcr.io/${{ secrets.GHCR_USERNAME }}/spring-thyme-app:latest"
+          docker pull $image
       
-          docker stop spring-app || true
-          docker rm   spring-app || true
+          docker stop spring-app 2>$null
+          docker rm spring-app 2>$null
           docker image prune -af
-
-          echo "GHCR_USERNAME=${{ secrets.GHCR_USERNAME }}" > .env
       
+          echo "GHCR_USERNAME=${{ secrets.GHCR_USERNAME }}" > .env
           docker compose up -d app
+        shell: pwsh
             
     # runs-on: ubuntu-latest
 
