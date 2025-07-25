@@ -39,7 +39,7 @@ jobs:
       
           echo "GHCR_USERNAME=${{ secrets.GHCR_USERNAME }}" > .env
           docker compose up -d app
-        shell: pwsh
+        shell: powershell
             
     # runs-on: ubuntu-latest
 
