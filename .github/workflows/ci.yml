@@ -39,6 +39,9 @@ jobs:
         run: |
           ./gradlew test jacocoTestReport build
 
+      - name: List jar files
+        run: ls -R build/libs
+
       # 4. 리포트 아티팩트 업로드 (항상 실행)
       - name: Upload JUnit HTML Report
         if: always()
