@@ -36,6 +36,9 @@ jobs:
       
           docker stop spring-app || true
           docker rm   spring-app || true
+          docker image prune -af
+
+          echo "GHCR_USERNAME=${{ secrets.GHCR_USERNAME }}" > .env
       
           docker compose up -d app
             
